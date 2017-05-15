@@ -1,0 +1,16 @@
+Boundary conditions are imposed weakly through the specification of a `ghost' state for elements in which $V \cap \partial \Omega \ne \{0\}$. The following boundary conditions are supported:
+
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lll}
+Boundary Condition & Reference(s) & Comments \\
+\hline
+Riemann Invariant & \cite[section \makeblue{2.2}]{carlson2011} & eq. (\makeblue{14}) should read $c_b = \frac{\gamma-1}{4} (R^+-R^-)$\\
+Slip-Wall & \cite[eq. (\makeblue{10})]{krivodonova2006} & \\
+Back Pressure (Outflow) & \cite[section \makeblue{2.4}]{carlson2011} & \\
+Total Temperature/Pressure (Inflow) & \cite[section \makeblue{2.7}]{carlson2011} & \\
+Supersonic Inflow/Outflow & & imposes exact/extrapolated solution\\
+No-slip Temperature       & & imposes $\vect{v}$ and $T$\\
+No-slip Adiabatic         & & imposes $\vect{v}$ and $\left( \vect{n} \cdot \vect{F(\vect{W},\vect{Q})} \right)_{E} = 0$\\
+\makered{No-slip Flux} & &
+\end{tabular}
+}

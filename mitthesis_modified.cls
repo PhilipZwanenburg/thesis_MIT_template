@@ -627,9 +627,14 @@ comment here
 \newcommand{\makegreen}[1]{{\color{ForestGreen}#1}}
 \newcommand{\makeblue}[1]{{\color{blue}#1}}
 
-\newcommand{\mat}[1]{\bm{{#1}}}
-\newcommand{\vect}[1]{\bm{{#1}}}
-\newcommand{\tens}[1]{\underline{\underline{\bm{#1}}}}
+\newcommand{\vars}[1]{\mathit{{{#1}}}}
+\newcommand{\varv}[1]{\mathit{\bm{{#1}}}}
+
+\newcommand{\vect}[1]{\mathbf{{#1}}}
+\newcommand{\mat}[1]{\mathbf{{#1}}}
+%\newcommand{\tens}[1]{\underline{\underline{\bm{#1}}}}
+
+\usepackage[cal=boondox]{mathalfa} % Add support for lowercase calligraphic letters
 
 \let\oldnabla\nabla
 \renewcommand{\nabla}{{\vect{\oldnabla}}}

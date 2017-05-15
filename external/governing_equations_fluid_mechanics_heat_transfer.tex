@@ -1,36 +1,44 @@
 Following the notation of Pletcher et al.~\cite[Chapter \makeblue{5}]{pletcher1997}, the continuity, Navier-Stokes and energy equations with source terms neglected are given by
 \begin{align} \label{eq:NavierStokes_std}
-\frac{\partial \vect{W}}{\partial t} + 
-\nabla \cdot \left( \vect{F^i}(\vect{W}) - \vect{F^v}(\vect{W},\vect{Q}) \right) = \vect{0},
-\end{align}%
-
-where the vector of conservative variables is given by
-\begin{align*}
-\vect{W} \coloneqq 
-\begin{bmatrix} \rho & \rho\vect{v} & E \end{bmatrix},
-\end{align*}%
-
-and where the inviscid and viscous fluxes are defined as
-\begin{align}
-&& \vect{F^i}(\vect{W}) & \coloneqq
-\begin{bmatrix} \rho\vect{v}^T & \rho \vect{v}^T \vect{v} + p \tens{I} & (E+p) \vect{v}^T \end{bmatrix}, \label{eq:F_inviscid} \\
-&& \vect{F^v}(\vect{W},\vect{Q}) & \coloneqq
-\begin{bmatrix} \vect{0}^T & \tens{\Pi} & \tens{\Pi} \vect{v}^T - \vect{q}^T \end{bmatrix}. \label{eq:F_viscous}
+\frac{\partial \varv{w}}{\partial t} + 
+\nabla \cdot \left( \varv{F^i}(\varv{w}) - \varv{F^v}(\varv{w},\varv{Q}) \right) = \vect{0},
 \end{align}
 
-The various symbols represent the density, $\rho$, the velocity vector, $\vect{v}$, the total energy per unit volume, $E$, the pressure, $p$, defined according to the equation of state for a calorically ideal gas,
+where the vector of conservative variables and its gradients are defined as
+\begin{alignat}{3}
+\varv{w} & \coloneqq \begin{bmatrix} \rho & \rho\varv{v} & E \end{bmatrix}
+&& \in \mathbb{R}^{d+2} \nonumber \\
+\varv{Q} & \coloneqq \nabla^T \varv{w}
+&& \in \mathbb{R}^{d+2} \times \mathbb{R}^{d}, \label{eq:Gradients}
+\end{alignat}
+
+where $d$ is the problem dimension, and where the inviscid and viscous fluxes are defined as
+\begin{alignat}{4}
+&& \varv{F^i}(\varv{w}) & \coloneqq
+\begin{bmatrix} \rho\varv{v}^T & \rho \varv{v}^T \varv{v} + p \varv{I} & (E+p) \varv{v}^T \end{bmatrix}
+&& \in \mathbb{R}^{d+2} \times \mathbb{R}^{d} \label{eq:F_inviscid} \\
+&& \varv{F^v}(\varv{w},\varv{Q}) & \coloneqq
+\begin{bmatrix} \vect{0}^T & \varv{\Pi} & \varv{\Pi} \varv{v}^T - \varv{q}^T \end{bmatrix}
+&& \in \mathbb{R}^{d+2} \times \mathbb{R}^{d}. \label{eq:F_viscous}
+\end{alignat}
+
+The various symbols represent the density, $\rho$, the velocity, $\varv{v}$, the total energy per unit volume, $E$, the pressure, $p$, defined according to the equation of state for a calorically ideal gas,
 \begin{align*}
-p = (\gamma-1) \left( E - \frac{1}{2} \rho \vect{v} \vect{v}^T \right),\ \gamma = \frac{c_p}{c_v}, 
+p 
+=
+(\gamma-1) \left( E - \frac{1}{2} \rho \varv{v} \varv{v}^T \right)
+\coloneqq
+(\gamma-1) \rho e,\ \gamma = \frac{c_p}{c_v},\ c_v = \frac{R_g}{\gamma-1},\ c_p = \frac{\gamma R_g}{\gamma-1},
 \end{align*}
 
-where the specific heats at constant volume, $c_v$, and at constant pressure, $c_p$, are constant, the stress tensor, $\tens{\Pi}$, given by
+where $e$ represents the specific internal energy, $R_g$ is the gas constant and the specific heats at constant volume, $c_v$, and at constant pressure, $c_p$, are constant, the stress tensor, $\varv{\Pi}$, given by
 \begin{align*}
-\tens{\Pi} = 2\mu \left( \tens{D} - \frac{1}{3} \nabla \cdot \vect{v} \tens{I} \right),\ \tens{D} \coloneqq \frac{1}{2} \left(\nabla^T \vect{v} + \left(\nabla^T \vect{v}\right)^T \right),
+\varv{\Pi} = 2\mu \left( \varv{D} - \frac{1}{3} \nabla \cdot \varv{v} \varv{I} \right),\ \varv{D} \coloneqq \frac{1}{2} \left(\nabla^T \varv{v} + \left(\nabla^T \varv{v}\right)^T \right),
 \end{align*}
 
-where $\mu$ is the coefficient of shear viscosity and where the coefficient of bulk viscosity was assumed to be zero, and the energy flux vector, $\vect{q}$, defined by
+where $\mu$ is the coefficient of shear viscosity \makered{(Add comment about how $\mu$ is determined (Sutherland, p.259 pletcher(1997)))} and where the coefficient of bulk viscosity was assumed to be zero, and the energy flux, $\varv{q}$, defined by
 \begin{align*}
-\vect{q} = \kappa \nabla T,
+\varv{q} = \kappa \nabla T,
 \end{align*}
 
 where $T$ represents the temperature and
@@ -38,4 +46,4 @@ where $T$ represents the temperature and
 \kappa = \frac{c_p \mu}{Pr},
 \end{align*}
 
-with $Pr$ representing the Prandtl number. In the case of the Euler equations, the contribution of the viscous flux is neglected.
+with $Pr$ representing the Prandtl number. In the case of the Euler equations, the contribution of the viscous flux is neglected. \makered{Potentially add nondimensionalizations for external and internal flow.}

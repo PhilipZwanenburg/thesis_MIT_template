@@ -6,3 +6,6 @@
 *.lot
 *.out
 *.toc
+
+*.gz
+*.swp
