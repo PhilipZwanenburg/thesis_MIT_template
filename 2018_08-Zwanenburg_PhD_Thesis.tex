@@ -1,0 +1,53 @@
+% -*- Mode:TeX -*-
+
+%% The documentclass options along with the pagestyle can be used to generate
+%% a technical report, a draft copy, or a regular thesis.  You may need to
+%% re-specify the pagestyle after you \include  cover.tex.  For more
+%% information, see the first few lines of mitthesis.cls. 
+
+%\documentclass[12pt,vi,twoside]{mitthesis}
+%%
+%%  If you want your thesis copyright to you instead of MIT, use the
+%%  ``vi'' option, as above.
+%%
+
+\documentclass[12pt,vi,twoside]{mitthesis_modified}
+\usepackage{lgrind}
+%% These have been added at the request of the MIT Libraries, because
+%% some PDF conversions mess up the ligatures.  -LB, 1/22/2014
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
+
+
+
+
+% ToBeModified: Include packages in mitthesis_modified.cls
+\usepackage{amsmath,amsthm,mathtools,bm}
+\allowdisplaybreaks % Allow breaking across multiple pages of aligned equations
+
+%\usepackage{graphicx}
+
+
+
+\begin{document}
+
+\pagestyle{plain}
+\pagenumbering{roman}
+\include{cover}
+\include{dedication}
+\input{acknowledgments}
+\input{abstract}
+\include{contents}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\include{introduction}
+\include{methodology}
+%\include{chap3} % Numerical Results
+%\include{chap4} % Conclusion
+%\appendix
+%\include{appa} % Code
+%%\include{appb} % Additional
+\include{bibliography}
+
+\end{document}

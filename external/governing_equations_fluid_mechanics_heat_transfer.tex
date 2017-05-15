@@ -1,0 +1,41 @@
+Following the notation of Pletcher et al.~\cite[Chapter \makeblue{5}]{pletcher1997}, the continuity, Navier-Stokes and energy equations with source terms neglected are given by
+\begin{align} \label{eq:NavierStokes_std}
+\frac{\partial \vect{W}}{\partial t} + 
+\nabla \cdot \left( \vect{F^i}(\vect{W}) - \vect{F^v}(\vect{W},\vect{Q}) \right) = \vect{0},
+\end{align}%
+
+where the vector of conservative variables is given by
+\begin{align*}
+\vect{W} \coloneqq 
+\begin{bmatrix} \rho & \rho\vect{v} & E \end{bmatrix},
+\end{align*}%
+
+and where the inviscid and viscous fluxes are defined as
+\begin{align}
+&& \vect{F^i}(\vect{W}) & \coloneqq
+\begin{bmatrix} \rho\vect{v}^T & \rho \vect{v}^T \vect{v} + p \tens{I} & (E+p) \vect{v}^T \end{bmatrix}, \label{eq:F_inviscid} \\
+&& \vect{F^v}(\vect{W},\vect{Q}) & \coloneqq
+\begin{bmatrix} \vect{0}^T & \tens{\Pi} & \tens{\Pi} \vect{v}^T - \vect{q}^T \end{bmatrix}. \label{eq:F_viscous}
+\end{align}
+
+The various symbols represent the density, $\rho$, the velocity vector, $\vect{v}$, the total energy per unit volume, $E$, the pressure, $p$, defined according to the equation of state for a calorically ideal gas,
+\begin{align*}
+p = (\gamma-1) \left( E - \frac{1}{2} \rho \vect{v} \vect{v}^T \right),\ \gamma = \frac{c_p}{c_v}, 
+\end{align*}
+
+where the specific heats at constant volume, $c_v$, and at constant pressure, $c_p$, are constant, the stress tensor, $\tens{\Pi}$, given by
+\begin{align*}
+\tens{\Pi} = 2\mu \left( \tens{D} - \frac{1}{3} \nabla \cdot \vect{v} \tens{I} \right),\ \tens{D} \coloneqq \frac{1}{2} \left(\nabla^T \vect{v} + \left(\nabla^T \vect{v}\right)^T \right),
+\end{align*}
+
+where $\mu$ is the coefficient of shear viscosity and where the coefficient of bulk viscosity was assumed to be zero, and the energy flux vector, $\vect{q}$, defined by
+\begin{align*}
+\vect{q} = \kappa \nabla T,
+\end{align*}
+
+where $T$ represents the temperature and
+\begin{align*}
+\kappa = \frac{c_p \mu}{Pr},
+\end{align*}
+
+with $Pr$ representing the Prandtl number. In the case of the Euler equations, the contribution of the viscous flux is neglected.
