@@ -22,7 +22,7 @@ where $d$ is the problem dimension, and where the inviscid and viscous fluxes ar
 && \in \mathbb{R}^{d+2} \times \mathbb{R}^{d}. \label{eq:F_viscous}
 \end{alignat}
 
-The various symbols represent the density, $\rho$, the velocity, $\varv{v}$, the total energy per unit volume, $E$, the pressure, $p$, defined according to the equation of state for a calorically ideal gas,
+The various symbols represent the density, $\rho$, the velocity, $\varv{v}$, the total energy per unit volume, $E$, the pressure, $p$, the stress tensor, $\varv{\Pi}$ and the energy flux, $\varv{q}$. The pressure is defined according to the equation of state for a calorically ideal gas,
 \begin{align*}
 p 
 =
@@ -31,12 +31,12 @@ p
 (\gamma-1) \rho e,\ \gamma = \frac{c_p}{c_v},\ c_v = \frac{R_g}{\gamma-1},\ c_p = \frac{\gamma R_g}{\gamma-1},
 \end{align*}
 
-where $e$ represents the specific internal energy, $R_g$ is the gas constant and the specific heats at constant volume, $c_v$, and at constant pressure, $c_p$, are constant, the stress tensor, $\varv{\Pi}$, given by
+where $e$ represents the specific internal energy, $R_g$ is the gas constant and the specific heats at constant volume, $c_v$, and at constant pressure, $c_p$, are constant. The stress tensor is defined as
 \begin{align*}
 \varv{\Pi} = 2\mu \left( \varv{D} - \frac{1}{3} \nabla \cdot \varv{v} \varv{I} \right),\ \varv{D} \coloneqq \frac{1}{2} \left(\nabla^T \varv{v} + \left(\nabla^T \varv{v}\right)^T \right),
 \end{align*}
 
-where $\mu$ is the coefficient of shear viscosity \makered{(Add comment about how $\mu$ is determined (Sutherland, p.259 pletcher(1997)))} and where the coefficient of bulk viscosity was assumed to be zero, and the energy flux, $\varv{q}$, defined by
+where $\mu$ is the coefficient of shear viscosity \makered{(Add comment about how $\mu$ is determined (Sutherland, p.259 pletcher(1997)))} and where the coefficient of bulk viscosity was assumed to be zero. Finally, the energy flux is defined by
 \begin{align*}
 \varv{q} = \kappa \nabla T,
 \end{align*}
