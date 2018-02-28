@@ -7,10 +7,10 @@ In this section, the governing equations of fluid mechanics and heat transfer, a
 \section{Governing Equations} \label{sec:governing_eqns_NS}
 \input{external/governing_equations_fluid_mechanics_heat_transfer}
 
-\section{Discretization}
+\section{Discretizations}
 
 \subsection{Preliminaries}
-Let $\Omega$ be a bounded simply connected open subset of $\mathbb{R}^d$ with connected Lipschitz boundary $\partial \Omega$ in $\mathbb{R}^{d-1}$. We let $\Omega_h$ denote the disjoint partion of $\Omega$ into ``elements'', $V$, and denote the element boundaries as $\partial V$. We also define the following volume inner products,
+Let $\Omega$ be a bounded simply connected open subset of $\mathbb{R}^d$ with connected Lipschitz boundary $\partial \Omega$ in $\mathbb{R}^{d-1}$. We let $\Omega_h$ denote the disjoint partion of $\Omega$ into ``elements'', $V$, and denote the element boundaries as $\partial V$. Elements and their boundaries are also referred to as volumes and faces respectively. We also define the following volume inner products,
 \begin{alignat*}{5}
 (a,b)_D & = \int_D ab;\ && a, b \in L^2(D), \\
 (\vect{a},\vect{b})_D & = \int_D \vect{a} \cdot \vect{b};\ && \vect{a}, \vect{b} \in L^2(D)^m, \\
@@ -24,19 +24,19 @@ where $D$ is a domain in $\mathbb{R}^d$, and where `$:$' denotes the inner produ
 \left<\vect{A},\vect{B}\right>_D & = \int_D \vect{A} : \vect{B};\ && \vect{A}, \vect{B} \in L^2(D)^{m \times d},
 \end{alignat*}
 
-where $D$ is a domain in $\mathbb{R}^{d-1}$. Denoting the polynomial space of order $k$ on domain $D$ as $\mathcal{P}^k(D)$, and letting $n = d+2$, we define the discontinuous discrete solution and gradient approximation spaces as
+where $D$ is a domain in $\mathbb{R}^{d-1}$. Denoting the polynomial space of order $p$ on domain $D$ as $\mathcal{P}^p(D)$, and letting $n = d+2$, we define the discontinuous discrete solution and gradient approximation spaces as
 \begin{align*}
-\mathcal{W}_h^v & = \{ \varv{a} \in L^2(\Omega_h)^{n} : \varv{a} |_V \in \mathcal{P}^k(V)^{n}\ \forall V \in \Omega_h \} \\
-\mathcal{Q}_h^v & = \{ \varv{A} \in L^2(\Omega_h)^{n \times d} : \varv{A} |_V \in \mathcal{P}^k(V)^{n \times d}\ \forall V \in \Omega_h \}.
+\mathcal{S}_h^v & = \{ \varv{a} \in L^2(\Omega_h)^{n} : \varv{a} |_V \in \mathcal{P}^p(V)^{n}\ \forall V \in \Omega_h \} \\
+\mathcal{G}_h^v & = \{ \varv{A} \in L^2(\Omega_h)^{n \times d} : \varv{A} |_V \in \mathcal{P}^p(V)^{n \times d}\ \forall V \in \Omega_h \}.
 \end{align*}
 
 We also define discontinuous test spaces
 \begin{align*}
-\mathcal{W_t}_h^v & = \{ \vect{a_t} \in L^2(\Omega_h)^{n} : \vect{a_t} |_V \in \mathcal{P}^{k_t}(V)^{n}\ \forall V \in \Omega_h \} \\
-\mathcal{Q_t}_h^v & = \{ \vect{A_t} \in L^2(\Omega_h)^{n \times d} : \vect{A_t} |_V \in \mathcal{P}^{k_t}(V)^{n \times d}\ \forall V \in \Omega_h \},
+\mathcal{W_t}_h^v & = \{ \vect{a_t} \in L^2(\Omega_h)^{n} : \vect{a_t} |_V \in \mathcal{P}^{p_t}(V)^{n}\ \forall V \in \Omega_h \} \\
+\mathcal{Q_t}_h^v & = \{ \vect{A_t} \in L^2(\Omega_h)^{n \times d} : \vect{A_t} |_V \in \mathcal{P}^{p_t}(V)^{n \times d}\ \forall V \in \Omega_h \},
 \end{align*}
 
-where $k_t \ge k$. 
+where $p_t \ge p$. \makered{Will need additional spaces for DPG}.
 
 \subsection{Discretized Equations}
 To obtain the discrete formulation, we first define a joint flux $\varv{F}(\varv{w},\varv{Q}) \coloneqq \varv{F^i}(\varv{w}) - \varv{F^v}(\varv{w},\varv{Q})$ then integrate~\eqref{eq:Gradients} and~\eqref{eq:NavierStokes_std} with respect to test functions to obtain
@@ -46,7 +46,7 @@ To obtain the discrete formulation, we first define a joint flux $\varv{F}(\varv
 \left(\vect{w_t}, \nabla \cdot \varv{F}(\varv{w},\varv{Q}) \right)_V = \vect{0},\ && \forall \vect{w_t} \in \mathcal{W_t}_h^v = \mathcal{W}_h^v.
 \end{alignat*}
 
-Integrating by parts twice in the first equation and once in the second and choosing $k_t = k$, such that the approximation and test spaces are the same, results in the discontinuous Galerkin formulation,
+Integrating by parts twice in the first equation and once in the second and choosing $p_t = p$, such that the approximation and test spaces are the same, results in the discontinuous Galerkin formulation,
 \begin{alignat*}{3}
 & \left(\vect{Q_t},\varv{Q} \right)_V
 =

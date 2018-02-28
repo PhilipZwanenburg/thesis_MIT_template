@@ -1,4 +1,4 @@
-Following the notation of Pletcher et al.~\cite[Chapter \makeblue{5}]{pletcher1997}, the continuity, Navier-Stokes and energy equations with source terms neglected are given by
+Following the notation of Pletcher et al.~\cite[Chapter \makeblue{5}]{Pletcher1997}, the continuity, Navier-Stokes and energy equations with source terms neglected are given by
 \begin{align} \label{eq:NavierStokes_std}
 \frac{\partial \varv{w}}{\partial t} + 
 \nabla \cdot \left( \varv{F^i}(\varv{w}) - \varv{F^v}(\varv{w},\varv{Q}) \right) = \vect{0},
@@ -16,7 +16,7 @@ where $d$ is the problem dimension, and where the inviscid and viscous fluxes ar
 \begin{alignat}{4}
 && \varv{F^i}(\varv{w}) & \coloneqq
 \begin{bmatrix} \rho\varv{v}^T & \rho \varv{v}^T \varv{v} + p \varv{I} & (E+p) \varv{v}^T \end{bmatrix}
-&& \in \mathbb{R}^{d+2} \times \mathbb{R}^{d} \label{eq:F_inviscid} \\
+&& \in \mathbb{R}^{d+2} \times \mathbb{R}^{d}, \label{eq:F_inviscid} \\
 && \varv{F^v}(\varv{w},\varv{Q}) & \coloneqq
 \begin{bmatrix} \vect{0}^T & \varv{\Pi} & \varv{\Pi} \varv{v}^T - \varv{q}^T \end{bmatrix}
 && \in \mathbb{R}^{d+2} \times \mathbb{R}^{d}. \label{eq:F_viscous}
@@ -46,4 +46,4 @@ where $T$ represents the temperature and
 \kappa = \frac{c_p \mu}{Pr},
 \end{align*}
 
-with $Pr$ representing the Prandtl number. In the case of the Euler equations, the contribution of the viscous flux is neglected. \makered{Potentially add nondimensionalizations for external and internal flow.}
+with $Pr$ representing the Prandtl number. In the case of the Euler equations, the contribution of the viscous flux is neglected.

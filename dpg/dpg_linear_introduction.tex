@@ -1,0 +1,27 @@
+\section{Linear DPG} \label{sec:dpg_linear}
+
+In this section, we first outline the basic concepts of DPG methods in an abstract linear functional setting and then provide a concrete example through the application of the theory to the linear advection equation.
+
+\subsection{Abstract Functional Setting}
+
+Much of the theory outlined below is borrowed directly from Demkowicz et al.~\cite{Demkowicz2014_overview}. Of primary note, it is demonstrated that the DPG method can be interpreted both as a minimum residual method as well as a localization of the continuous Petrov-Galerkin (PG) method with globally optimal test functions.
+
+\subsubsection{DPG as a Minimum Residual Method}
+\makered{Potentially change title of subsection: DPG as the most accurate projection of the solution measured in the \underline{natural?} norm?}
+
+Consider the \textit{linear} abstract variational problem
+\begin{align}
+& \text{Find}\ u \in \mathcal{U}\ \text{such that}\\
+& b(v,u) = l(v)\ \forall v \in \mathcal{V}.
+\end{align}
+
+Above, $\mathcal{U}$ and $\mathcal{V}$ denote the trial and test spaces, respectively, which are assumed to be Hilbert spaces, $b(\cdot,\cdot)$ is a bilinear form on $\mathcal{V} \times \mathcal{U}$ and $l(\cdot)$ is a linear form on $\mathcal{V}$. It is assumed that the bilinear form satisfies a continuity condition with continuity constant $M$,
+\begin{align}
+| b(v,u) | \le M ||u||_{\mathcal{U}} ||v||_{\mathcal{V}},
+\end{align}
+
+and an inf-sup condition with inf-sup constant $\gamma$,
+\begin{align}
+\exists \gamma > 0 : \adjustlimits\inf_{u\in\mathcal{U}} \sup_{v\in\mathcal{V}} \frac{b(v,u)}{||v||_{\mathcal{V}}||u||_{\mathcal{U}}} \ge \gamma.
+\end{align}
+
