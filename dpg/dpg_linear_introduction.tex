@@ -1,10 +1,13 @@
 \section{Linear DPG} \label{sec:dpg_linear}
 
-In this section, we first outline the basic concepts of DPG methods in an abstract linear functional setting and then provide a concrete example through the application of the theory to the linear advection equation.
+In this section, we first outline the basic concepts of DPG methods in an abstract linear functional setting and then
+provide a concrete example through the application of the theory to the linear advection equation.
 
 \subsection{Abstract Functional Setting}
 
-Much of the theory outlined below is borrowed directly from Demkowicz et al.~\cite{Demkowicz2014_overview}. Of primary note, it is demonstrated that the DPG method can be interpreted both as a minimum residual method as well as a localization of the continuous Petrov-Galerkin (PG) method with globally optimal test functions.
+Much of the theory outlined below is borrowed directly from Demkowicz et al.~\cite{Demkowicz2014_overview}. Of primary
+note, it is demonstrated that the DPG method can be interpreted both as a minimum residual method as well as a
+localization of the continuous Petrov-Galerkin (PG) method with globally optimal test functions.
 
 \subsubsection{DPG as a Minimum Residual Method}
 \makered{Potentially change title of subsection: DPG as the most accurate projection of the solution measured in the \underline{natural?} norm?}
@@ -25,3 +28,4 @@ and an inf-sup condition with inf-sup constant $\gamma$,
 \exists \gamma > 0 : \adjustlimits\inf_{u\in\mathcal{U}} \sup_{v\in\mathcal{V}} \frac{b(v,u)}{||v||_{\mathcal{V}}||u||_{\mathcal{U}}} \ge \gamma.
 \end{align}
 
+\makered{See Demkowicz2017, section 3 for a very nice derivation of what is being attempted above.}
