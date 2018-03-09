@@ -6,11 +6,12 @@ provide a concrete example through the application of the theory to the linear a
 \subsection{Abstract Functional Setting}
 
 Much of the theory outlined below is borrowed directly from the works of Demkowicz et
-al.~\cite{Demkowicz2014_overview,Demkowicz2017}. Of primary note, it is demonstrated that the DPG method can be
+al.~\cite{Demkowicz2014_overview,Demkowicz2017}. Of primary note, it is demonstrated that each DPG method can be
 interpreted as the \emph{localization} of a method achieving optimal discrete stability through the choice of an
 optimal conforming test space.
 
-\subsubsection{A Discrete Petrov-Galerkin Variational Methodology with Optimal Stability}
+\subsubsection{A Petrov-Galerkin Variational Methodology with Optimal Stability}
+\label{sec:PG_aspect_of_DPG}
 
 Consider the \emph{linear} abstract variational problem
 \begin{align} \label{eq:bilinear_abstract_infinite}
@@ -20,7 +21,7 @@ b(v,u) = l(v)\ \forall v \in \mathcal{V},
 
 where $\mathcal{U}$ and $\mathcal{V}$ denote the trial and test spaces, respectively, which are assumed to be Hilbert
 spaces, and where the bilinear form $b(\cdot,\cdot)$ acting on $\mathcal{V} \times \mathcal{U}$ and the linear form
-$l(\cdot)$ acting on $\mathcal{V}$ represent a particular variational formulation. It is assumed that the bilinear form
+$l(\cdot)$ acting on $\mathcal{V}$ correspond to a particular variational formulation. It is assumed that the bilinear form
 satisfies a continuity condition with continuity constant $M$,
 \begin{align}
 | b(v,u) | \le M ||u||_{\mathcal{U}} ||v||_{\mathcal{V}},
@@ -40,7 +41,8 @@ l(v) = 0\ \forall v \in \mathcal{V}_0,\ \text{where}\ \mathcal{V}_0 \coloneqq \{
 \end{align}
 
 % Special characters in text: https://tex.stackexchange.com/a/8859
-Then, by the Banach-Ne\v{c}as-Babu\v{s}ka theorem \makered{(Add reference to Brener-Scott/Ciarlet)}, ~\eqref{eq:bilinear_abstract_infinite} has a unique solution, $u$, that depends continuously on the data,
+Then, by the Banach-Ne\v{c}as-Babu\v{s}ka theorem \makered{(Add reference to Brener-Scott/Ciarlet)},
+~\eqref{eq:bilinear_abstract_infinite} has a unique solution, $u$, that depends continuously on the data,
 \begin{align}
 ||u||_{\mathcal{U}} \le \frac{M}{\gamma} ||l||_{\mathcal{V}'},
 \end{align}
@@ -59,19 +61,19 @@ If the form satisfies the discrete inf-sup condition with inf-sup constant $\gam
 \frac{b(v_h,u_h)}{||v_h||_{\mathcal{V}_h}||u_h||_{\mathcal{U}_h}} \ge \gamma_h,
 \end{align}
 
-then Babu\v{s}ka's theorem~\cite[Theorem \makeblue{2.2}]{Babuska1971}, demonstrates the discrete problem,
+then Babu\v{s}ka's theorem~\cite[Theorem \makeblue{2.2}]{Babuska1971}, demonstrates that the discrete problem,
 ~\eqref{eq:bilinear_abstract_finite}, is well-posed with the Galerkin error satisfying the error estimate,
 \begin{align} \label{eq:abstract_dpg_error}
 ||u_h-u||_{\mathcal{U}} \le \frac{M}{\gamma_h} \inf_{w_h \in \mathcal{U}_h} ||w_h-u||_{\mathcal{U}}.
 \end{align}
 
-where the original constant in the bound, $1 + \frac{M}{\gamma_h}$~\cite[eq. (\makeblue{2.14})]{Babuska1971}, has been
+where the original constant in the bound, $\left( 1 + \frac{M}{\gamma_h} \right)$~\cite[eq. (\makeblue{2.14})]{Babuska1971}, has been
 sharpened to $\frac{M}{\gamma_h}$ as demonstrated to be possible by Xu et al.~\cite[Theorem \makeblue{2}]{Xu2003}.
 Generally, the well-posedness of the continuous problem does not imply the well-posedness of the discrete problem
 (i.e.~\eqref{eq:inf_sup_infinite} $\centernot\implies$~\eqref{eq:inf_sup_finite}), and the fundamental motivation for
 the DPG methodology is then to choose the test space such that the supremum in the discrete inf-sup
-condition,~\eqref{eq:inf_sup_finite}, is obtained \makered{(Potentially refer to where it is proven that DPG test
-functions are chosen in this way (following the demonstration in Demkowicz et al.~\cite[Section 4.1]{Demkowicz2017}))}.
+condition,~\eqref{eq:inf_sup_finite}, is obtained. \makered{(Potentially refer to where it is proven that DPG test
+functions are chosen in this way (following the demonstration in Demkowicz et al.~\cite[Section 4.1]{Demkowicz2017}))}
 
 A case of particular interest is then when the continuity and discrete inf-sup constants can be made equal,
 \begin{align} \label{eq:equal_m_gamma}
@@ -79,18 +81,20 @@ M = \gamma_h,
 \end{align}
 
 so that the error incurred by the discrete approximation in~\eqref{eq:abstract_dpg_error} is smallest. As it is not
-immediately clear which norms should be selected for the tiral and test spaces, the simplest strategy is to let the norm
+immediately clear which norms should be selected for the trial and test spaces, the simplest strategy is to let the norm
 be selected as that which is naturally induced by the problem such that~\eqref{eq:equal_m_gamma} is satisfied. Bui-Thanh
 et al.~\cite[Theorem \makeblue{2.6}]{BuiThanh2013} have proven that $M = \gamma = 1$ if
 \begin{align} \label{eq:bui_thanh_2-6}
-\exists v_u \in \mathcal{V}\ \{0\} : b(v_u,u) = ||u||_{\mathcal{U}} ||v_u||_{\mathcal{V}}\ \forall u \in \mathcal{U}\ \{0\},
+\exists v_u \in \mathcal{V}\ \{0\} : b(v_u,u) = ||u||_{\mathcal{U}} ||v_u||_{\mathcal{V}}\ \forall u \in \mathcal{U}
+\setminus \{0\},
 \end{align}
 
 where $v_u$ is termed an optimal test function for the trial function $u$. Further, assuming
 that~\eqref{eq:bui_thanh_2-6} holds,~\eqref{eq:equal_m_gamma} is satisfied when the discrete test space is defined by
 \begin{align}
-\mathcal{V} \supset \mathcal{V}_h = span \{ v_{u_h} \in \mathcal{V} : u_h \in \mathcal{U}_h \subset \mathcal{U}, b(v_{u_h},u_h) = ||u_h||_{\mathcal{U}}
-||v_{u_h}||_{\mathcal{V}} \};
+\mathcal{V} \supset \mathcal{V}_h 
+= span \{ v_{u_h} \in \mathcal{V} : u_h \in \mathcal{U}_h \subset \mathcal{U},\ b(v_{u_h},u_h) 
+= ||u_h||_{\mathcal{U}} ||v_{u_h}||_{\mathcal{V}} \};
 \end{align}
 
 see Bui-Thanh et al.~\cite[Lemma \makeblue{2.8}]{BuiThanh2013}. Defining the map from trial to test space, $T :
@@ -99,13 +103,13 @@ see Bui-Thanh et al.~\cite[Lemma \makeblue{2.8}]{BuiThanh2013}. Defining the map
 (v,Tu)_{\mathcal{V}} = b(v,u),
 \end{align}
 
-then
+where $(\cdot,\cdot)_{\mathcal{V}}$ represents the test space inner product, then
 \begin{align} \label{eq:space_optimal_test}
 \mathcal{V}_h = span \{ v_{T u_h} \in \mathcal{V} : u_h \in \mathcal{U}_h \};
 \end{align}
 
-see Bui-Thanh et al.~\cite[Theorem \makeblue{2.9}]{BuiThanh2013}. Defining the Riesz operator for the test inner product
-$(\cdot,\cdot)_{\mathcal{V}}$,
+see Bui-Thanh et al.~\cite[Theorem \makeblue{2.9}]{BuiThanh2013}. Defining the Riesz operator for the test inner
+product,
 \begin{align}
 R_{\mathcal{V}} : \mathcal{V} \ni v \rightarrow (v,\cdot) \in \mathcal{V}',
 \end{align}
@@ -113,17 +117,59 @@ R_{\mathcal{V}} : \mathcal{V} \ni v \rightarrow (v,\cdot) \in \mathcal{V}',
 which is an isometric isomorphism by the Riesz Representation Theorem \makered{(Add reference)}, the test functions
 spanning $\mathcal{V}_h$ in~\eqref{eq:space_optimal_test}, which are henceforth referred to as \emph{optimal} test
 functions, can be computed through the inversion of the Riesz operator by solving the auxiliary variational problem
-\begin{align} \label{eq:bilinear_abstract_infinite}
+\begin{align} \label{eq:auxiliary_opt_v}
 \text{Find}\ v_{T u_h} \in \mathcal{V}\ \text{such that}\
 (w,v_{T u_h})_{\mathcal{V}} = b(w,u_h),\ \forall w \in \mathcal{V}.
 \end{align}
 
-\subsubsection{DPG as a Localization of an Optimal Conforming PG Methodology}
+\subsubsection{DPG as a Localization of the Optimal Conforming PG Methodology}
 
-Note that no assumptions regarding the conformity of the trial and test spaces have yet been made. The specification of
-the `D' (discontinuous) in DPG, referring to a discontinuous test space, has not yet been made and the methodology of
-this section is thus describing a general Petrov-Galerkin methodology. It will subsequently be demonstrated that the
-use of non-conforming test spaces is a requirement for obtaining a \emph{practical} methodology \makered{(Add reference to
-section where this is done)}.
+Note that no assumptions regarding the conformity of the trial and test spaces were imposed
+in~\autoref{sec:PG_aspect_of_DPG}. Specifically, the specification of the `D' (discontinuous) in DPG, referring to a
+discontinuous test space, has not yet been made and the methodology described is thus of a general Petrov-Galerkin
+form. Denote the trial \emph{graph} space over the domain $\Omega$, $\mathcal{H}_b(\Omega)$, as that of the solution
+of~\eqref{eq:bilinear_abstract_infinite},
+\begin{align}
+\mathcal{H}_b(\Omega) \coloneqq
+\{ u \in (L^2(\Omega))^n : b(v,u) \in (L^2(\Omega))^n \forall v \in \mathcal{V} \},
+\end{align}
+
+where $n$ denotes the number of scalar variables. Integration by parts of~\eqref{eq:bilinear_abstract_infinite} leads to
+the formal $L^2$-adjoint and a bilinear form representing the boundary terms
+\begin{align}
+b(v,u) = b^*(v,u) + c(\text{tr}_A^* v, \text{tr}_A u)
+\end{align}
+
+where $v$ is in the graph space for the adjoint
+\begin{align}
+\mathcal{H}_b^*(\Omega) \coloneqq
+\{ v \in (L^2(\Omega))^n : b^*(v,u) \in (L^2(\Omega))^n \forall u \in \mathcal{U} \}.
+\end{align}
+
+See Demkowicz et al.~\cite[eq. (\makeblue{4.18})]{Demkowicz2014_overview} for a concrete example of these operators.
+When setting $\mathcal{V} = \mathcal{H}_b^*(\Omega)$, we say that the test space is $\mathcal{H}_b$-conforming.
+\\~
+
+As the eventual goal of the methodology is to solve~\eqref{eq:bilinear_abstract_finite} over a tesselation, $T_h$, of
+the discretized domain, $\Omega_h$, consisting of elements (referred to as volumes) $V$, we note that using a
+$\mathcal{H}_b$-conforming test space results in each of the optimal test functions computed
+by~\eqref{eq:auxiliary_opt_v} having global support (i.e. potentially over all of $\Omega_h$).  To make the methodology
+practical, broken energy spaces are introduced such that the required inversion of the Riesz operator can be done
+elementwise, \emph{localizing}~\eqref{eq:auxiliary_opt_v},
+\begin{align}
+\text{Find}\ v_{T u_h} \in \mathcal{V}(V)\ \text{such that}\
+(w,v_{T u_h})_{\mathcal{V}(V)} = b(w,u_h),\ \forall w \in \mathcal{V}(V)
+\end{align}
+
+where 
+\begin{align}
+\mathcal{V}(V) \coloneqq \{ v \in L^2(\Omega) : v|_V \in \mathcal{H}_b^*\ \forall V \in T_h \}.
+\end{align}
+
+Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it has been shown that the PG methodology
+of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG methodology where $L^2$-conforming test
+spaces are used. \makered{Comment along the lines of: This comes at the cost of introducing trace unknowns over the
+interior volume boundaries?} We now briefly reproduce the proof of Demkowicz et al.~\cite[Section
+\makeblue{6}]{Demkowicz2014_overview}.
 
 \makered{Briefly reproduce the proof of \cite{Demkowicz2014_overview}, section 6 and make connections with DG.}
