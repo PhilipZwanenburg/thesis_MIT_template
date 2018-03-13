@@ -15,56 +15,58 @@ optimal conforming test space.
 
 Consider the \emph{linear} abstract variational problem
 \begin{align} \label{eq:bilinear_abstract_infinite}
-\text{Find}\ u \in \mathcal{U}\ \text{such that}\
-b(v,u) = l(v)\ \forall v \in \mathcal{V},
+\text{Find}\ u \in \fspace{U}\ \text{such that}\
+b(v,u) = l(v)\ \forall v \in \fspace{V},
 \end{align}
 
-where $\mathcal{U}$ and $\mathcal{V}$ denote the trial and test spaces, respectively, which are assumed to be Hilbert
-spaces, and where the bilinear form $b(\cdot,\cdot)$ acting on $\mathcal{V} \times \mathcal{U}$ and the linear form
-$l(\cdot)$ acting on $\mathcal{V}$ correspond to a particular variational formulation. It is assumed that the bilinear form
+where $\fspace{U}$ and $\fspace{V}$ denote the trial and test spaces, respectively, which are assumed to be Hilbert
+spaces, and where the bilinear form $b(\cdot,\cdot)$ acting on $\fspace{V} \times \fspace{U}$ and the linear form
+$l(\cdot)$ acting on $\fspace{V}$ correspond to a particular variational formulation. It is assumed that the bilinear form
 satisfies a continuity condition with continuity constant $M$,
 \begin{align}
-| b(v,u) | \le M ||u||_{\mathcal{U}} ||v||_{\mathcal{V}},
+| b(v,u) | \le M
+||v||_{\fspace{V}}
+||u||_{\fspace{U}},
 \end{align}
 
 and an inf-sup condition with inf-sup constant $\gamma$,
 \begin{align} \label{eq:inf_sup_infinite}
 \exists \gamma > 0 :
-\adjustlimits\inf_{u\in\mathcal{U}} \sup_{v\in\mathcal{V}}
-\frac{b(v,u)}{||v||_{\mathcal{V}}||u||_{\mathcal{U}}} \ge \gamma.
+\adjustlimits\inf_{u\in\fspace{U}} \sup_{v\in\fspace{V}}
+\frac{b(v,u)}{||v||_{\fspace{V}}||u||_{\fspace{U}}} \ge \gamma.
 \end{align}
 
 Further, it is assumed that the linear form is continuous and satisfies the following compatibility condition
 \begin{align}
-l(v) = 0\ \forall v \in \mathcal{V}_0,\ \text{where}\ \mathcal{V}_0 \coloneqq \{v \in \mathcal{V} : b(v,u) = 0\ \forall u
-\in \mathcal{U} \}.
+l(v) = 0\ \forall v \in \fspace{V}_0,\ \text{where}\ \fspace{V}_0 \coloneqq \{v \in \fspace{V} : b(v,u) = 0\ \forall u
+\in \fspace{U} \}.
 \end{align}
 
 % Special characters in text: https://tex.stackexchange.com/a/8859
 Then, by the Banach-Ne\v{c}as-Babu\v{s}ka theorem \makered{(Add reference to Brener-Scott/Ciarlet)},
 ~\eqref{eq:bilinear_abstract_infinite} has a unique solution, $u$, that depends continuously on the data,
 \begin{align}
-||u||_{\mathcal{U}} \le \frac{M}{\gamma} ||l||_{\mathcal{V}'},
+||u||_{\fspace{U}} \le \frac{M}{\gamma} ||l||_{\fspace{V}'},
 \end{align}
 
-where $\mathcal{V}'$ denotes the dual space of $\mathcal{V}$. Now let $\mathcal{U}_h \subset \mathcal{U}$ and $\mathcal{V}_h
-\subset \mathcal{V}$ be finite dimensional trial and test spaces and consider the finite dimensional variation problem
+where $\fspace{V}'$ denotes the dual space of $\fspace{V}$. Now let $\fspace{U}_h \subset \fspace{U}$ and $\fspace{V}_h
+\subset \fspace{V}$ be finite dimensional trial and test spaces and consider the finite dimensional variation problem
 \begin{align} \label{eq:bilinear_abstract_finite}
-\text{Find}\ u_h \in \mathcal{U}_h\ \text{such that}\
-b(v_h,u_h) = l(v_h)\ \forall v_h \in \mathcal{V}_h.
+\text{Find}\ u_h \in \fspace{U}_h\ \text{such that}\
+b(v_h,u_h) = l(v_h)\ \forall v_h \in \fspace{V}_h.
 \end{align}
 
 If the form satisfies the discrete inf-sup condition with inf-sup constant $\gamma_h$,
 \begin{align} \label{eq:inf_sup_finite}
 \exists \gamma_h > 0 :
-\adjustlimits\inf_{u_h\in\mathcal{U}_h} \sup_{v_h\in\mathcal{V}_h}
-\frac{b(v_h,u_h)}{||v_h||_{\mathcal{V}_h}||u_h||_{\mathcal{U}_h}} \ge \gamma_h,
+\adjustlimits\inf_{u_h\in\fspace{U}_h} \sup_{v_h\in\fspace{V}_h}
+\frac{b(v_h,u_h)}{||v_h||_{\fspace{V}_h}||u_h||_{\fspace{U}_h}} \ge \gamma_h,
 \end{align}
 
-then Babu\v{s}ka's theorem~\cite[Theorem \makeblue{2.2}]{Babuska1971}, demonstrates that the discrete problem,
+then Babu\v{s}ka's theorem~\cite[Theorem \makeblue{2.2}]{Babuska1971} demonstrates that the discrete problem,
 ~\eqref{eq:bilinear_abstract_finite}, is well-posed with the Galerkin error satisfying the error estimate,
 \begin{align} \label{eq:abstract_dpg_error}
-||u_h-u||_{\mathcal{U}} \le \frac{M}{\gamma_h} \inf_{w_h \in \mathcal{U}_h} ||w_h-u||_{\mathcal{U}}.
+||u_h-u||_{\fspace{U}} \le \frac{M}{\gamma_h} \inf_{w_h \in \fspace{U}_h} ||w_h-u||_{\fspace{U}}.
 \end{align}
 
 where the original constant in the bound, $\left( 1 + \frac{M}{\gamma_h} \right)$~\cite[eq. (\makeblue{2.14})]{Babuska1971}, has been
@@ -82,44 +84,45 @@ M = \gamma_h,
 
 so that the error incurred by the discrete approximation in~\eqref{eq:abstract_dpg_error} is smallest. As it is not
 immediately clear which norms should be selected for the trial and test spaces, the simplest strategy is to let the norm
-be selected as that which is naturally induced by the problem such that~\eqref{eq:equal_m_gamma} is satisfied. Bui-Thanh
+be chosen as that which is naturally induced by the problem such that~\eqref{eq:equal_m_gamma} is satisfied. Bui-Thanh
 et al.~\cite[Theorem \makeblue{2.6}]{BuiThanh2013} have proven that $M = \gamma = 1$ if
 \begin{align} \label{eq:bui_thanh_2-6}
-\exists v_u \in \mathcal{V}\ \{0\} : b(v_u,u) = ||u||_{\mathcal{U}} ||v_u||_{\mathcal{V}}\ \forall u \in \mathcal{U}
-\setminus \{0\},
+\exists v_u \in \fspace{V}\ \setminus \{0\} :
+b(v_u,u) = ||v_u||_{\fspace{V}} ||u||_{\fspace{U}}\ \forall u \in \fspace{U} \setminus \{0\},
 \end{align}
 
 where $v_u$ is termed an optimal test function for the trial function $u$. Further, assuming
 that~\eqref{eq:bui_thanh_2-6} holds,~\eqref{eq:equal_m_gamma} is satisfied when the discrete test space is defined by
-\begin{align}
-\mathcal{V} \supset \mathcal{V}_h 
-= span \{ v_{u_h} \in \mathcal{V} : u_h \in \mathcal{U}_h \subset \mathcal{U},\ b(v_{u_h},u_h) 
-= ||u_h||_{\mathcal{U}} ||v_{u_h}||_{\mathcal{V}} \};
+\begin{align} \label{eq:def_discrete_test_space}
+\fspace{V} \supset \fspace{V}_h 
+= span \{ v_{u_h} \in \fspace{V} : u_h \in \fspace{U}_h \subset \fspace{U},\ b(v_{u_h},u_h) 
+= ||v_{u_h}||_{\fspace{V}} ||u_h||_{\fspace{U}} \};
 \end{align}
 
 see Bui-Thanh et al.~\cite[Lemma \makeblue{2.8}]{BuiThanh2013}. Defining the map from trial to test space, $T :
-\mathcal{U} \ni u \rightarrow Tu \coloneqq v_{Tu} \in \mathcal{V} $, by
+\fspace{U} \ni u \rightarrow Tu \coloneqq v_{Tu} \in \fspace{V} $, by
 \begin{align}
-(v,Tu)_{\mathcal{V}} = b(v,u),
+(v,Tu)_{\fspace{V}} = b(v,u),
 \end{align}
 
-where $(\cdot,\cdot)_{\mathcal{V}}$ represents the test space inner product, then
-\begin{align} \label{eq:space_optimal_test}
-\mathcal{V}_h = span \{ v_{T u_h} \in \mathcal{V} : u_h \in \mathcal{U}_h \};
+where $(\cdot,\cdot)_{\fspace{V}}$ represents the test space inner product, then the discrete test
+space,~\eqref{eq:def_discrete_test_space}, is equivalently defined as
+\begin{align}
+\fspace{V}_h = span \{ v_{T u_h} \in \fspace{V} : u_h \in \fspace{U}_h \};
 \end{align}
 
 see Bui-Thanh et al.~\cite[Theorem \makeblue{2.9}]{BuiThanh2013}. Defining the Riesz operator for the test inner
 product,
 \begin{align}
-R_{\mathcal{V}} : \mathcal{V} \ni v \rightarrow (v,\cdot) \in \mathcal{V}',
+R_{\fspace{V}} : \fspace{V} \ni v \rightarrow (v,\cdot) \in \fspace{V}',
 \end{align}
 
 which is an isometric isomorphism by the Riesz Representation Theorem \makered{(Add reference)}, the test functions
-spanning $\mathcal{V}_h$ in~\eqref{eq:space_optimal_test}, which are henceforth referred to as \emph{optimal} test
+spanning $\fspace{V}_h$, which are henceforth referred to as \emph{optimal} test
 functions, can be computed through the inversion of the Riesz operator by solving the auxiliary variational problem
 \begin{align} \label{eq:auxiliary_opt_v}
-\text{Find}\ v_{T u_h} \in \mathcal{V}\ \text{such that}\
-(w,v_{T u_h})_{\mathcal{V}} = b(w,u_h),\ \forall w \in \mathcal{V}.
+\text{Find}\ v_{T u_h} \in \fspace{V}\ \text{such that}\
+(w,v_{T u_h})_{\fspace{V}} = b(w,u_h),\ \forall w \in \fspace{V}.
 \end{align}
 
 \subsubsection{DPG as a Localization of the Optimal Conforming PG Methodology}
@@ -127,11 +130,11 @@ functions, can be computed through the inversion of the Riesz operator by solvin
 Note that no assumptions regarding the conformity of the trial and test spaces were imposed
 in~\autoref{sec:PG_aspect_of_DPG}. Specifically, the specification of the `D' (discontinuous) in DPG, referring to a
 discontinuous test space, has not yet been made and the methodology described is thus of a general Petrov-Galerkin
-form. Denote the trial \emph{graph} space over the domain $\Omega$, $\mathcal{H}_b(\Omega)$, as that of the solution
+form. Denote the trial \emph{graph} space over the domain $\Omega$, $\fspace{H}_b(\Omega)$, as that of the solution
 of~\eqref{eq:bilinear_abstract_infinite},
 \begin{align}
-\mathcal{H}_b(\Omega) \coloneqq
-\{ u \in (L^2(\Omega))^n : b(v,u) \in (L^2(\Omega))^n \forall v \in \mathcal{V} \},
+\fspace{H}_b(\Omega) \coloneqq
+\{ u \in (L^2(\Omega))^n : b(v,u) \in (L^2(\Omega))^n\ \forall v \in \fspace{V} \},
 \end{align}
 
 where $n$ denotes the number of scalar variables. Integration by parts of~\eqref{eq:bilinear_abstract_infinite} leads to
@@ -142,34 +145,39 @@ b(v,u) = b^*(v,u) + c(\text{tr}_A^* v, \text{tr}_A u)
 
 where $v$ is in the graph space for the adjoint
 \begin{align}
-\mathcal{H}_b^*(\Omega) \coloneqq
-\{ v \in (L^2(\Omega))^n : b^*(v,u) \in (L^2(\Omega))^n \forall u \in \mathcal{U} \}.
+\fspace{H}_b^*(\Omega) \coloneqq
+\{ v \in (L^2(\Omega))^n : b^*(v,u) \in (L^2(\Omega))^n\ \forall u \in \fspace{U} \}.
 \end{align}
 
 See Demkowicz et al.~\cite[eq. (\makeblue{4.18})]{Demkowicz2014_overview} for a concrete example of these operators.
-When setting $\mathcal{V} = \mathcal{H}_b^*(\Omega)$, we say that the test space is $\mathcal{H}_b$-conforming.
+When setting $\fspace{V} = \fspace{H}_b^*(\Omega)$, we say that the test space is $\fspace{H}_b$-conforming.
 \\~
 
-As the eventual goal of the methodology is to solve~\eqref{eq:bilinear_abstract_finite} over a tesselation, $T_h$, of
-the discretized domain, $\Omega_h$, consisting of elements (referred to as volumes) $V$, we note that using a
-$\mathcal{H}_b$-conforming test space results in each of the optimal test functions computed
+As the eventual goal of the methodology is to solve~\eqref{eq:bilinear_abstract_finite} over a tesselation,
+$\mathcal{T}_h$, of the discretized domain, $\Omega_h$, consisting of elements (referred to as volumes) $\fe{V}$, we
+note that using an $\fspace{H}_b$-conforming test space results in each of the optimal test functions computed
 by~\eqref{eq:auxiliary_opt_v} having global support (i.e. potentially over all of $\Omega_h$).  To make the methodology
 practical, broken energy spaces are introduced such that the required inversion of the Riesz operator can be done
 elementwise, \emph{localizing}~\eqref{eq:auxiliary_opt_v},
 \begin{align}
-\text{Find}\ v_{T u_h} \in \mathcal{V}(V)\ \text{such that}\
-(w,v_{T u_h})_{\mathcal{V}(V)} = b(w,u_h),\ \forall w \in \mathcal{V}(V)
+\text{Find}\ v_{T u_h} \in \fspace{V}(\fe{V})\ \text{such that}\
+(w,v_{T u_h})_{\fspace{V}(\fe{V})} = b(w,u_h),\ \forall w \in \fspace{V}(\fe{V})
 \end{align}
 
 where 
 \begin{align}
-\mathcal{V}(V) \coloneqq \{ v \in L^2(\Omega) : v|_V \in \mathcal{H}_b^*\ \forall V \in T_h \}.
+\fspace{V}(\Omega_h) 
+&\coloneqq
+\{ v \in L^2(\Omega) : v|_{\fe{V}} \in \fspace{H}_b^*(\fe{V})\ \forall \fe{V} \in \mathcal{T}_h \}, \\
+(w,v)_{\fspace{V}(\Omega_h)}
+&\coloneqq
+\sum_{\fe{V}} (w|_{\fe{V}},v|_{\fe{V}})_{\fspace{V}(\fe{V})}
 \end{align}
 
-Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it has been shown that the PG methodology
-of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG methodology where $L^2$-conforming test
-spaces are used. \makered{Comment along the lines of: This comes at the cost of introducing trace unknowns over the
-interior volume boundaries?} We now briefly reproduce the proof of Demkowicz et al.~\cite[Section
-\makeblue{6}]{Demkowicz2014_overview}.
+and $\fspace{V}(\fe{V})$ is the volume test space. Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it
+has been shown that the PG methodology of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG
+methodology where $L^2$-conforming test spaces are used. \makered{Comment along the lines of: This comes at the cost of
+introducing trace unknowns over the interior volume boundaries?} We now briefly reproduce the proof of Demkowicz et
+al.~\cite[Section \makeblue{6}]{Demkowicz2014_overview}.
 
 \makered{Briefly reproduce the proof of \cite{Demkowicz2014_overview}, section 6 and make connections with DG.}
