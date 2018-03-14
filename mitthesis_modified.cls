@@ -634,8 +634,9 @@ comment here
 \newcommand{\mat}[1]{\mathbf{{#1}}}
 %\newcommand{\tens}[1]{\underline{\underline{\bm{#1}}}}
 
-\newcommand{\fspace}[1]{\mathit{{{#1}}}} % 'f'inite element space
-\newcommand{\fe}[1]{\mathcal{{{#1}}}}    % 'f'inite 'e'lement
+\newcommand{\fspace}[1]{\mathit{{{#1}}}}          % 'f'unction space
+\newcommand{\afspace}[1]{\tilde{\mathit{{{#1}}}}} % 'a'pproximate 'f'unction space
+\newcommand{\fe}[1]{\mathcal{{{#1}}}}             % 'f'inite 'e'lement
 
 \usepackage[cal=boondox]{mathalfa} % Add support for lowercase calligraphic letters
 

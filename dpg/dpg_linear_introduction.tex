@@ -1,8 +1,11 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Linear DPG} \label{sec:dpg_linear}
 
 In this section, we first outline the basic concepts of DPG methods in an abstract linear functional setting and then
 provide a concrete example through the application of the theory to the linear advection equation.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Abstract Functional Setting}
 
 Much of the theory outlined below is borrowed directly from the works of Demkowicz et
@@ -10,6 +13,7 @@ al.~\cite{Demkowicz2014_overview,Demkowicz2017}. Of primary note, it is demonstr
 interpreted as the \emph{localization} of a method achieving optimal discrete stability through the choice of an
 optimal conforming test space.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{A Petrov-Galerkin Variational Methodology with Optimal Stability}
 \label{sec:PG_aspect_of_DPG}
 
@@ -107,7 +111,7 @@ see Bui-Thanh et al.~\cite[Lemma \makeblue{2.8}]{BuiThanh2013}. Defining the map
 
 where $(\cdot,\cdot)_{\fspace{V}}$ represents the test space inner product, then the discrete test
 space,~\eqref{eq:def_discrete_test_space}, is equivalently defined as
-\begin{align}
+\begin{align} \label{eq:def_discrete_test_space_alt}
 \fspace{V}_h = span \{ v_{T u_h} \in \fspace{V} : u_h \in \fspace{U}_h \};
 \end{align}
 
@@ -125,6 +129,7 @@ functions, can be computed through the inversion of the Riesz operator by solvin
 (w,v_{T u_h})_{\fspace{V}} = b(w,u_h),\ \forall w \in \fspace{V}.
 \end{align}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{DPG as a Localization of the Optimal Conforming PG Methodology}
 
 Note that no assumptions regarding the conformity of the trial and test spaces were imposed
@@ -159,7 +164,7 @@ note that using an $\fspace{H}_b$-conforming test space results in each of the o
 by~\eqref{eq:auxiliary_opt_v} having global support (i.e. potentially over all of $\Omega_h$).  To make the methodology
 practical, broken energy spaces are introduced such that the required inversion of the Riesz operator can be done
 elementwise, \emph{localizing}~\eqref{eq:auxiliary_opt_v},
-\begin{align}
+\begin{align} \label{eq:auxiliary_opt_v_infinite}
 \text{Find}\ v_{T u_h} \in \fspace{V}(\fe{V})\ \text{such that}\
 (w,v_{T u_h})_{\fspace{V}(\fe{V})} = b(w,u_h),\ \forall w \in \fspace{V}(\fe{V})
 \end{align}
@@ -174,10 +179,27 @@ where
 \sum_{\fe{V}} (w|_{\fe{V}},v|_{\fe{V}})_{\fspace{V}(\fe{V})}
 \end{align}
 
-and $\fspace{V}(\fe{V})$ is the volume test space. Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it
-has been shown that the PG methodology of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG
-methodology where $L^2$-conforming test spaces are used. \makered{Comment along the lines of: This comes at the cost of
-introducing trace unknowns over the interior volume boundaries?} We now briefly reproduce the proof of Demkowicz et
+and $\fspace{V}(\fe{V})$ is the volume test space. Finally, it must be noted that the variational problem for the test
+functions,~\eqref{eq:auxiliary_opt_v_infinite}, is infinite dimensional. In practice, it must be solved approximately, for
+\textit{approximate optimal test functions}, in an approximate volume test space $\afspace{V} \subset \fspace{V}$,
+\begin{align} \label{eq:auxiliary_opt_v_finite}
+\text{Find}\ \tilde{v}_{T u_h} \in \afspace{V}(\fe{V})\ \text{such that}\
+(\tilde{w},\tilde{v}_{T u_h})_{\afspace{V}(\fe{V})} = b(\tilde{w},u_h),\ \forall \tilde{w} \in \afspace{V}(\fe{V}),
+\end{align}
+
+where the corresponding approximate optimal test space is, analogous to~\eqref{eq:def_discrete_test_space_alt}, by
+\begin{align} \label{eq:def_discrete_test_space_alt_approx}
+\afspace{V}_h = span \{ \tilde{v}_{T u_h} \in \afspace{V} : u_h \in \fspace{U}_h \}.
+\end{align}
+
+\makered{Potentially add comment regarding account for the approximation of optimal test functions \cite[eqs. (4.30) -
+(4.32)]{Demkowicz2014_overview}.}
+
+Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it has been shown that the PG methodology
+of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG methodology where $L^2$-conforming test
+spaces are used. \makered{Comment along the lines of: This comes at the cost of introducing trace unknowns over the
+interior volume boundaries? (\cite[p.158]{Demkowicz2014_overview})} We now briefly reproduce the proof of Demkowicz et
 al.~\cite[Section \makeblue{6}]{Demkowicz2014_overview}.
 
 \makered{Briefly reproduce the proof of \cite{Demkowicz2014_overview}, section 6 and make connections with DG.}
+likely do not use tilde again to denote conforming (perhaps bar?)
