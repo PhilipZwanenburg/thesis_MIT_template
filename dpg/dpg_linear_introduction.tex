@@ -187,7 +187,7 @@ functions,~\eqref{eq:auxiliary_opt_v_infinite}, is infinite dimensional. In prac
 (\tilde{w},\tilde{v}_{T u_h})_{\afspace{V}(\fe{V})} = b(\tilde{w},u_h),\ \forall \tilde{w} \in \afspace{V}(\fe{V}),
 \end{align}
 
-where the corresponding approximate optimal test space is, analogous to~\eqref{eq:def_discrete_test_space_alt}, by
+where the corresponding approximate optimal test space is, analogous to~\eqref{eq:def_discrete_test_space_alt}, defined by
 \begin{align} \label{eq:def_discrete_test_space_alt_approx}
 \afspace{V}_h = span \{ \tilde{v}_{T u_h} \in \afspace{V} : u_h \in \fspace{U}_h \}.
 \end{align}
@@ -197,9 +197,34 @@ where the corresponding approximate optimal test space is, analogous to~\eqref{e
 
 Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it has been shown that the PG methodology
 of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG methodology where $L^2$-conforming test
-spaces are used. \makered{Comment along the lines of: This comes at the cost of introducing trace unknowns over the
-interior volume boundaries? (\cite[p.158]{Demkowicz2014_overview})} We now briefly reproduce the proof of Demkowicz et
-al.~\cite[Section \makeblue{6}]{Demkowicz2014_overview}.
+spaces are used as shown in the proof of~\autoref{prop:pg_subset_of_dpg}. This however comes at the cost of introducing
+trace unknowns over the interior volume boundaries, in addition to trace unknowns defined on the domain boundary, both
+of which are subsequently denoted by $\hat{u}$.
+
+We separate the bilinear form into the following components
+\begin{align}
+b(v,u) \coloneqq b(v,(w,\hat{w})) \coloneqq \bar{b}(v,w) + \left<\left< v,\hat{w} \right>\right>
+\end{align}
+
+where $\bar{b}(v,w)$ includes all terms present in the PG methodology outlined in~\autoref{sec:PG_aspect_of_DPG} and
+$\left<\left< v,\hat{w} \right>\right>$ accounts for newly introduced terms arising as a result of the usage of the
+broken tests space. Above, $w$ includes the solution component in $L^2$, $u$, as well as the trace, $\hat{u}$, on the
+domain boundary while $\hat{w}$ includes only the trace on the internal volume boundaries. Following the previous
+notation, the discrete solution variables are represented by $w_h \in \afspace{W}_h$ and $\hat{w}_h \in \ftspace{W}_h$,
+volume and trace approximate solution spaces. Defining the weakly conforming optimal test space as
+\begin{align}
+\bar{V}_h = \{ v \in \afspace{V}_h : \left<\left< v,\hat{w}_h \right>\right> = 0\ \forall \hat{w}_h \in \aftspace{W} \},
+\end{align}
+
+we have the following
+
+\begin{proposition}[PG Test Space as a Subset of DPG Test Space] \label{prop:pg_subset_of_dpg}
+$\bar{V}_h \subset \afspace{V}_h.$
+\end{proposition}
+
+\begin{proof}
+We briefly reproduce the proof of Demkowicz et al.~\cite[Section \makeblue{6}]{Demkowicz2014_overview}.
+\end{proof}
 
 \makered{Briefly reproduce the proof of \cite{Demkowicz2014_overview}, section 6 and make connections with DG.}
 likely do not use tilde again to denote conforming (perhaps bar?)

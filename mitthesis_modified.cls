@@ -614,6 +614,12 @@ comment here
 \titlespacing*{\subsection}{0pt}{0pt}{0pt}
 \titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
 
+% For theorems, lemmas, propositions, etc
+\usepackage{amsmath,amsthm,amssymb,mathtools,bm,centernot}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newcommand{\propositionautorefname}{Proposition}
+
 % For section symbol (must be placed after \usepackage{hyperref})
 \def\Snospace~{\S{}}
 \renewcommand*\sectionautorefname{\Snospace}
@@ -634,9 +640,11 @@ comment here
 \newcommand{\mat}[1]{\mathbf{{#1}}}
 %\newcommand{\tens}[1]{\underline{\underline{\bm{#1}}}}
 
-\newcommand{\fspace}[1]{\mathit{{{#1}}}}          % 'f'unction space
-\newcommand{\afspace}[1]{\tilde{\mathit{{{#1}}}}} % 'a'pproximate 'f'unction space
-\newcommand{\fe}[1]{\mathcal{{{#1}}}}             % 'f'inite 'e'lement
+\newcommand{\fspace}[1]{\mathit{{{#1}}}}                 % 'f'unction space
+\newcommand{\ftspace}[1]{\hat{\mathit{{{#1}}}}}          % 'f'unction 't'race space
+\newcommand{\afspace}[1]{\tilde{\mathit{{{#1}}}}}        % 'a'pproximate 'f'unction space
+\newcommand{\aftspace}[1]{\widetilde{\hat{\mathit{{{#1}}}}}} % 'a'pproximate 'f'unction 't'race space
+\newcommand{\fe}[1]{\mathcal{{{#1}}}}                    % 'f'inite 'e'lement
 
 \usepackage[cal=boondox]{mathalfa} % Add support for lowercase calligraphic letters
 
