@@ -14,8 +14,7 @@ interpreted as the \emph{localization} of a method achieving optimal discrete st
 optimal conforming test space.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{A Petrov-Galerkin Variational Methodology with Optimal Stability}
-\label{sec:PG_aspect_of_DPG}
+\subsubsection{A Petrov-Galerkin Variational Methodology with Optimal Stability} \label{sec:PG_aspect_of_DPG}
 
 Consider the \emph{linear} abstract variational problem
 \begin{align} \label{eq:bilinear_abstract_infinite}
@@ -53,8 +52,8 @@ Then, by the Banach-Ne\v{c}as-Babu\v{s}ka theorem \makered{(Add reference to Bre
 ||u||_{\fspace{U}} \le \frac{M}{\gamma} ||l||_{\fspace{V}'},
 \end{align}
 
-where $\fspace{V}'$ denotes the dual space of $\fspace{V}$. Now let $\fspace{U}_h \subset \fspace{U}$ and $\fspace{V}_h
-\subset \fspace{V}$ be finite dimensional trial and test spaces and consider the finite dimensional variation problem
+where $\fspace{V}'$ denotes the dual space of $\fspace{V}$. Now let $\fspace{U}_h \subseteq \fspace{U}$ and $\fspace{V}_h
+\subseteq \fspace{V}$ be finite dimensional trial and test spaces and consider the finite dimensional variation problem
 \begin{align} \label{eq:bilinear_abstract_finite}
 \text{Find}\ u_h \in \fspace{U}_h\ \text{such that}\
 b(v_h,u_h) = l(v_h)\ \forall v_h \in \fspace{V}_h.
@@ -99,7 +98,7 @@ where $v_u$ is termed an optimal test function for the trial function $u$. Furth
 that~\eqref{eq:bui_thanh_2-6} holds,~\eqref{eq:equal_m_gamma} is satisfied when the discrete test space is defined by
 \begin{align} \label{eq:def_discrete_test_space}
 \fspace{V} \supset \fspace{V}_h 
-= span \{ v_{u_h} \in \fspace{V} : u_h \in \fspace{U}_h \subset \fspace{U},\ b(v_{u_h},u_h) 
+= span \{ v_{u_h} \in \fspace{V} : u_h \in \fspace{U}_h \subseteq \fspace{U},\ b(v_{u_h},u_h) 
 = ||v_{u_h}||_{\fspace{V}} ||u_h||_{\fspace{U}} \};
 \end{align}
 
@@ -121,7 +120,7 @@ product,
 R_{\fspace{V}} : \fspace{V} \ni v \rightarrow (v,\cdot) \in \fspace{V}',
 \end{align}
 
-which is an isometric isomorphism by the Riesz Representation Theorem \makered{(Add reference)}, the test functions
+which is an isometric isomorphism (\cite[Theorem \makeblue{4.9-4}]{Ciarlet2013}), the test functions
 spanning $\fspace{V}_h$, which are henceforth referred to as \emph{optimal} test
 functions, can be computed through the inversion of the Riesz operator by solving the auxiliary variational problem
 \begin{align} \label{eq:auxiliary_opt_v}
@@ -130,7 +129,7 @@ functions, can be computed through the inversion of the Riesz operator by solvin
 \end{align}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{DPG as a Localization of the Optimal Conforming PG Methodology}
+\subsubsection{DPG as a Localization of the Optimal Conforming PG Methodology} \label{sec:dpg_abstract_setting}
 
 Note that no assumptions regarding the conformity of the trial and test spaces were imposed
 in~\autoref{sec:PG_aspect_of_DPG}. Specifically, the specification of the `D' (discontinuous) in DPG, referring to a
@@ -158,7 +157,7 @@ See Demkowicz et al.~\cite[eq. (\makeblue{4.18})]{Demkowicz2014_overview} for a 
 When setting $\fspace{V} = \fspace{H}_b^*(\Omega)$, we say that the test space is $\fspace{H}_b$-conforming.
 \\~
 
-As the eventual goal of the methodology is to solve~\eqref{eq:bilinear_abstract_finite} over a tesselation,
+As the eventual goal of the methodology is to solve~\eqref{eq:bilinear_abstract_finite} over a tessellation,
 $\mathcal{T}_h$, of the discretized domain, $\Omega_h$, consisting of elements (referred to as volumes) $\fe{V}$, we
 note that using an $\fspace{H}_b$-conforming test space results in each of the optimal test functions computed
 by~\eqref{eq:auxiliary_opt_v} having global support (i.e. potentially over all of $\Omega_h$).  To make the methodology
@@ -181,7 +180,7 @@ where
 
 and $\fspace{V}(\fe{V})$ is the volume test space. Finally, it must be noted that the variational problem for the test
 functions,~\eqref{eq:auxiliary_opt_v_infinite}, is infinite dimensional. In practice, it must be solved approximately, for
-\textit{approximate optimal test functions}, in an approximate volume test space $\afspace{V} \subset \fspace{V}$,
+\textit{approximate optimal test functions}, in an approximate volume test space $\afspace{V} \subseteq \fspace{V}$,
 \begin{align} \label{eq:auxiliary_opt_v_finite}
 \text{Find}\ \tilde{v}_{T u_h} \in \afspace{V}(\fe{V})\ \text{such that}\
 (\tilde{w},\tilde{v}_{T u_h})_{\afspace{V}(\fe{V})} = b(\tilde{w},u_h),\ \forall \tilde{w} \in \afspace{V}(\fe{V}),
@@ -198,33 +197,132 @@ where the corresponding approximate optimal test space is, analogous to~\eqref{e
 Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it has been shown that the PG methodology
 of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG methodology where $L^2$-conforming test
 spaces are used as shown in the proof of~\autoref{prop:pg_subset_of_dpg}. This however comes at the cost of introducing
-trace unknowns over the interior volume boundaries, in addition to trace unknowns defined on the domain boundary, both
-of which are subsequently denoted by $\hat{u}$.
+trace unknowns over the interior volume boundaries, in addition to the already existing trace unknowns on the domain
+boundary, both of which are subsequently denoted by $\hat{u}$.
 
-We separate the bilinear form into the following components
-\begin{align}
-b(v,u) \coloneqq b(v,(w,\hat{w})) \coloneqq \bar{b}(v,w) + \left<\left< v,\hat{w} \right>\right>
+Defining the group variable $\varg{u} \coloneqq (u,\hat{u})$ containing both the solution components in $L^2$ as well as
+those defined on traces (boundary and internal),
+we separate the bilinear form into the following components
+\begin{align} \label{eq:bilinear_decomposition}
+b(v,\varg{u})
+\coloneqq b(v,(u,\hat{u})) \coloneqq \bar{b}(v,\varg{w}) + \left<\left< v,\hat{w} \right>\right>
 \end{align}
 
-where $\bar{b}(v,w)$ includes all terms present in the PG methodology outlined in~\autoref{sec:PG_aspect_of_DPG} and
+where $\bar{b}(v,\varg{w})$ includes all terms present in the PG methodology outlined in~\autoref{sec:PG_aspect_of_DPG} and
 $\left<\left< v,\hat{w} \right>\right>$ accounts for newly introduced terms arising as a result of the usage of the
-broken tests space. Above, $w$ includes the solution component in $L^2$, $u$, as well as the trace, $\hat{u}$, on the
-domain boundary while $\hat{w}$ includes only the trace on the internal volume boundaries. Following the previous
-notation, the discrete solution variables are represented by $w_h \in \afspace{W}_h$ and $\hat{w}_h \in \ftspace{W}_h$,
-volume and trace approximate solution spaces. Defining the weakly conforming optimal test space as
-\begin{align}
+broken tests space. Above, $w$ includes the solution component in $L^2$, $u$, as well as the trace component on the
+domain boundary while $\hat{w}$ includes only the trace component on the internal volume boundaries. Following the
+previous notation, discrete solution variables are represented by $\varg{w}_h \in \fspace{U}_h \times \ftspace{U}_h$ and
+$\hat{w}_h \in \ftspace{W}_h \subset \ftspace{U}_h$. Defining the weakly
+conforming optimal test space as
+\begin{align} \label{eq:weakly_conforming_approx_test_space}
 \bar{V}_h = \{ v \in \afspace{V}_h : \left<\left< v,\hat{w}_h \right>\right> = 0\ \forall \hat{w}_h \in \aftspace{W} \},
 \end{align}
 
 we have the following
 
-\begin{proposition}[PG Test Space as a Subset of DPG Test Space] \label{prop:pg_subset_of_dpg}
+\begin{proposition}[PG Test Space as a Strict Subset of DPG Test Space] \label{prop:pg_subset_of_dpg}
 $\bar{V}_h \subset \afspace{V}_h.$
 \end{proposition}
 
 \begin{proof}
-We briefly reproduce the proof of Demkowicz et al.~\cite[Section \makeblue{6}]{Demkowicz2014_overview}.
+
+We briefly reproduce the proof of Demkowicz et al.~\cite[Section \makeblue{6}]{Demkowicz2014_overview}. As
+$\afspace{V}$ is a finite dimensional Hilbert space and $\afspace{V}_h \subseteq \afspace{V}$, the direct sum
+theorem~\cite[Theorem \makeblue{4.5-2}]{Ciarlet2013} allows for its decomposition as
+\begin{align}
+\afspace{V} = \afspace{V}_h + \afspace{V}_h^{\bot}
+\end{align}
+
+where $\afspace{V}_h^{\bot}$ is the $\afspace{V}$-orthogonal complement of $\afspace{V}_h$ in $\afspace{V}$. This can be
+seen from 
+\begin{align}
+\afspace{V}_h^{\bot}
+\coloneqq\ & \{ \tilde{v} \in \afspace{V} :
+(\tilde{x},\tilde{v})_{\afspace{V}(\fe{V})} = b(\tilde{x},\varg{u}_h),\ \forall \varg{u}_h \in \fspace{U} \setminus
+\fspace{U}_h,\ \forall \tilde{x} \in \afspace{V}(\fe{V}) \}
+ && (\text{using}~\eqref{eq:auxiliary_opt_v_finite}) \nonumber \\
+=\ & \{ \tilde{v} \in \afspace{V} :
+(\tilde{x},\tilde{v})_{\afspace{V}(\fe{V})} = 0,\ \forall \tilde{x} \in \afspace{V}(\fe{V}) \}.
+ && (\text{by Galerkin orthogonality}) \nonumber
+\end{align}
+
+\makered{Think about the implication above that $(\tilde{x},\tilde{v})_{\afspace{V}(\fe{V})} \ne 0\ \forall \tilde{v}
+\in \afspace{V}_h, \ \forall \tilde{x} \in \afspace{V}(\fe{V})$.}
+
+Let $\bar{V}_h \ni \bar{v} = \{ v \in \afspace{V} : (\tilde{x},v)_{\afspace{V}(\fe{V})} = \bar{b}(\tilde{x},\varg{w}_h)\ \forall
+\tilde{x} \in \afspace{V}(\fe{V}) \}$. Since $\bar{v} \in \afspace{V}$, it can be decomposed as
+\begin{align}
+\bar{v} = \bar{v}_h + \bar{v}_h^{\bot},\ \bar{v}_h \in \afspace{V}_h,\ \bar{v}_h^{\bot} \in \afspace{V}_h^{\bot}.
+\end{align}
+
+Since, $T\hat{w}_h \in \afspace{V}_h$, it follows that
+\begin{align}
+0 
+=\ & (\bar{v}_h^{\bot},T\hat{w}_h)_{\afspace{V}(\fe{V})} && (\text{using}\ \afspace{V}\text{-orthogonality}) \nonumber \\
+=\ & b(\bar{v}_h^{\bot},(0,\hat{w}_h)) && (\text{using}~\eqref{eq:auxiliary_opt_v_finite}) \nonumber \\
+=\ & \left<\left< \bar{v}_h^{\bot},\hat{w}_h \right>\right> && (\text{using}~\eqref{eq:bilinear_decomposition}) \label{eq:weak_continuous_v}
+\end{align}
+
+and consequently that $\bar{v}_h^{\bot} \in \bar{V}_h$. Because $T\varg{w}_h \in \afspace{V}_h$, then, as above,
+\begin{align}
+0 = \bar{b}(\bar{v}_h^{\bot},\varg{w}_h).
+\end{align}
+
+By definition of $\bar{v}$
+\begin{align}
+0
+=\ &
+(\bar{v}_h^{\bot},\bar{v})_{\afspace{V}(\fe{V})} && (\text{by definition}) \nonumber \\
+=\ &
+(\bar{v}_h^{\bot},\bar{v}_h^{\bot})_{\afspace{V}(\fe{V})} && (\text{using}\ \afspace{V}\text{-orthogonality}). \nonumber
+\end{align}
+
+and it is immediate that $\bar{v} = \bar{v}_h \in \afspace{V}_h$.
+
 \end{proof}
 
-\makered{Briefly reproduce the proof of \cite{Demkowicz2014_overview}, section 6 and make connections with DG.}
-likely do not use tilde again to denote conforming (perhaps bar?)
+If the optimal conforming PG methodology,~\autoref{sec:PG_aspect_of_DPG}, and the DPG methodology are both uniquely
+solvable, then their solutions are the same because substitution of conforming test functions into the DPG formulation
+immediately recovers the PG formulation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A Concrete Example: Linear Advection}
+
+Consider the steady linear advection equation as a model problem
+\begin{subequations}
+\begin{align}
+& \varv{b} \cdot \nabla \vars{u} = s && \text{in}\ \Omega, \label{eq:linear_advection_omega} \\
+& u = u_{\Gamma}\ && \text{on}\ \Gamma \coloneqq \{ \varv{x} \in \partial\Omega : \varv{\hat{n}} \cdot b < 0 \},
+\end{align}
+\end{subequations}
+
+where $\varv{b}$ is the advection velocity and $\varv{\hat{n}}$ is the outward pointing normal vector. Partitioning the
+domain with $N_v$ non-overlapping volumes, $\fe{V}$, with faces, $\fe{F}_v \coloneqq \partial \fe{V}_v$, such that
+$\Omega_h = \sum_{v=1}^{N_v}$, \makered{(Check notation with Brenner)},~\eqref{eq:linear_advection_omega} is multiplied
+by a test function $v$ and integrated by parts to give the bilinear and linear forms
+\begin{subequations}
+\begin{align}
+b(v,u) 
+=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} \nabla v \cdot \varv{b} u\ d\fe{V_v} + \int_{\fe{F}_v \cap \Gamma^i} v
+\varv{\hat{n}} \cdot \varv{b} u^*\ d\fe{F}_v, \label{eq:bilinear_pg_advection}\\
+l(v)
+=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} v s\ d\fe{V_v} + \int_{\fe{F}_v \cap \Gamma} v \varv{\hat{n}} \cdot \varv{b}
+u_{\Gamma}\ d\fe{F}_v,
+\end{align}
+\end{subequations}
+
+where $\Gamma^i$ is the set of all internal volume faces (i.e. all faces excluding those in $\Gamma$) and where the
+single-valued solution trace unknowns, $u^*$, have been introduced.Introducing the \textit{jump}
+operator,~\eqref{eq:bilinear_pg_advection} can be expressed more compactly as
+\begin{align}
+b(v,u) 
+=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} \nabla v \cdot \varv{b} u\ d\fe{V_v}
++ \frac{1}{2} \int_{\fe{F}_v} \jump{\varv{v}} \cdot \varv{b} u^*\ d\fe{F}_v, \label{eq:bilinear_pg_advection_jump}
+\end{align}
+
+where $\jump{\varv{v}} = v^- \varv{\hat{n}}^- + v^+ \varv{\hat{n}}^+$ with the additional specification of $v^-
+\varv{\hat{n}}^- = v^+ \varv{\hat{n}}^+$ \makered{Check outflow convention from Bui-Thanh}
+
+
+

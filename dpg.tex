@@ -1,10 +1,10 @@
 \chapter{The DPG Methodology}
 
-In comparison to discontinuous Galerkin (DG) methods, the noteworthy characteristic of the Discontinuous
-Petrov-Galerkin (DPG) methodology is that the optimal (to be defined below) test space is computed based on the
-minimization of the residual in a specified norm instead of simply being chosen to be the same as the trial space.
-Following Demkowicz et al.~\cite{Demkowicz2017}, DPG is generally referred to as a methodology, as opposed to
-a method, as different methods are obtained depending on the choice of inner product in the test space.
-\makered{Comment about requiring Hilbert based on use of term "inner product" here?}
+In comparison to discontinuous Galerkin (DG) methods, the noteworthy characteristic of the Discontinuous Petrov-Galerkin
+(DPG) methodology is that the optimal (to be defined below) test space is computed based on the minimization of the
+residual in a specified norm instead of simply being chosen to be the same as the trial space.  Following Demkowicz et
+al.~\cite{Demkowicz2017}, DPG is generally referred to as a methodology, as opposed to a method, as different methods
+are obtained depending on the choice of inner product in the test space. As it is heavily relied on in the following
+presentation, it may be assumed that all spaces considered are Hilbert spaces.
 
 \input{dpg/dpg_linear_introduction.tex}

@@ -616,9 +616,11 @@ comment here
 
 % For theorems, lemmas, propositions, etc
 \usepackage{amsmath,amsthm,amssymb,mathtools,bm,centernot}
-\newtheorem{theorem}{Theorem}
-\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
 \newcommand{\propositionautorefname}{Proposition}
+\newcommand{\corollaryautorefname}{Corrolary}
 
 % For section symbol (must be placed after \usepackage{hyperref})
 \def\Snospace~{\S{}}
@@ -633,8 +635,9 @@ comment here
 \newcommand{\makegreen}[1]{{\color{ForestGreen}#1}}
 \newcommand{\makeblue}[1]{{\color{blue}#1}}
 
-\newcommand{\vars}[1]{\mathit{{{#1}}}}
-\newcommand{\varv}[1]{\mathit{\bm{{#1}}}}
+\newcommand{\vars}[1]{\mathit{{{#1}}}}    % 's'calar 'var'iable
+\newcommand{\varv}[1]{\mathit{\bm{{#1}}}} % 'v'ector 'var'iable
+\newcommand{\varg}[1]{\mathit{\bm{{#1}}}} % 'g'roup  'var'iable
 
 \newcommand{\vect}[1]{\mathbf{{#1}}}
 \newcommand{\mat}[1]{\mathbf{{#1}}}
@@ -645,6 +648,8 @@ comment here
 \newcommand{\afspace}[1]{\tilde{\mathit{{{#1}}}}}        % 'a'pproximate 'f'unction space
 \newcommand{\aftspace}[1]{\widetilde{\hat{\mathit{{{#1}}}}}} % 'a'pproximate 'f'unction 't'race space
 \newcommand{\fe}[1]{\mathcal{{{#1}}}}                    % 'f'inite 'e'lement
+
+\newcommand{\jump}[1]{{\left[\left[#1\right]\right]}}
 
 \usepackage[cal=boondox]{mathalfa} % Add support for lowercase calligraphic letters
 
