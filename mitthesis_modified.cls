@@ -616,6 +616,7 @@ comment here
 
 % For theorems, lemmas, propositions, etc
 \usepackage{amsmath,amsthm,amssymb,mathtools,bm,centernot}
+\mathtoolsset{showonlyrefs} % Only number equations which are referred to in text.
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{corollary}{Corollary}[section]
@@ -649,7 +650,10 @@ comment here
 \newcommand{\aftspace}[1]{\widetilde{\hat{\mathit{{{#1}}}}}} % 'a'pproximate 'f'unction 't'race space
 \newcommand{\fe}[1]{\mathcal{{{#1}}}}                    % 'f'inite 'e'lement
 
-\newcommand{\jump}[1]{{\left[\left[#1\right]\right]}}
+\usepackage{stmaryrd} % For jump operator brackets
+\newcommand{\jump}[1]{{\llbracket #1\rrbracket}}
+\newcommand{\sign}[1]{{\text{sgn}\left(#1\right)}}
+\newcommand{\support}[1]{{\text{supp}(#1)}}
 
 \usepackage[cal=boondox]{mathalfa} % Add support for lowercase calligraphic letters
 

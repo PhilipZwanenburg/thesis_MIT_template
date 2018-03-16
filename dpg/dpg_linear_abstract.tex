@@ -1,12 +1,5 @@
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Linear DPG} \label{sec:dpg_linear}
-
-In this section, we first outline the basic concepts of DPG methods in an abstract linear functional setting and then
-provide a concrete example through the application of the theory to the linear advection equation.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Abstract Functional Setting}
+\section{Abstract Functional Setting}
 
 Much of the theory outlined below is borrowed directly from the works of Demkowicz et
 al.~\cite{Demkowicz2014_overview,Demkowicz2017}. Of primary note, it is demonstrated that each DPG method can be
@@ -14,7 +7,7 @@ interpreted as the \emph{localization} of a method achieving optimal discrete st
 optimal conforming test space.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{A Petrov-Galerkin Variational Methodology with Optimal Stability} \label{sec:PG_aspect_of_DPG}
+\subsection{A Petrov-Galerkin Variational Methodology with Optimal Stability} \label{sec:PG_aspect_of_DPG}
 
 Consider the \emph{linear} abstract variational problem
 \begin{align} \label{eq:bilinear_abstract_infinite}
@@ -129,7 +122,7 @@ functions, can be computed through the inversion of the Riesz operator by solvin
 \end{align}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{DPG as a Localization of the Optimal Conforming PG Methodology} \label{sec:dpg_abstract_setting}
+\subsection{DPG as a Localization of the Optimal Conforming PG Methodology} \label{sec:dpg_abstract_setting}
 
 Note that no assumptions regarding the conformity of the trial and test spaces were imposed
 in~\autoref{sec:PG_aspect_of_DPG}. Specifically, the specification of the `D' (discontinuous) in DPG, referring to a
@@ -285,44 +278,3 @@ and it is immediate that $\bar{v} = \bar{v}_h \in \afspace{V}_h$.
 If the optimal conforming PG methodology,~\autoref{sec:PG_aspect_of_DPG}, and the DPG methodology are both uniquely
 solvable, then their solutions are the same because substitution of conforming test functions into the DPG formulation
 immediately recovers the PG formulation.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{A Concrete Example: Linear Advection}
-
-Consider the steady linear advection equation as a model problem
-\begin{subequations}
-\begin{align}
-& \varv{b} \cdot \nabla \vars{u} = s && \text{in}\ \Omega, \label{eq:linear_advection_omega} \\
-& u = u_{\Gamma}\ && \text{on}\ \Gamma \coloneqq \{ \varv{x} \in \partial\Omega : \varv{\hat{n}} \cdot b < 0 \},
-\end{align}
-\end{subequations}
-
-where $\varv{b}$ is the advection velocity and $\varv{\hat{n}}$ is the outward pointing normal vector. Partitioning the
-domain with $N_v$ non-overlapping volumes, $\fe{V}$, with faces, $\fe{F}_v \coloneqq \partial \fe{V}_v$, such that
-$\Omega_h = \sum_{v=1}^{N_v}$, \makered{(Check notation with Brenner)},~\eqref{eq:linear_advection_omega} is multiplied
-by a test function $v$ and integrated by parts to give the bilinear and linear forms
-\begin{subequations}
-\begin{align}
-b(v,u) 
-=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} \nabla v \cdot \varv{b} u\ d\fe{V_v} + \int_{\fe{F}_v \cap \Gamma^i} v
-\varv{\hat{n}} \cdot \varv{b} u^*\ d\fe{F}_v, \label{eq:bilinear_pg_advection}\\
-l(v)
-=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} v s\ d\fe{V_v} + \int_{\fe{F}_v \cap \Gamma} v \varv{\hat{n}} \cdot \varv{b}
-u_{\Gamma}\ d\fe{F}_v,
-\end{align}
-\end{subequations}
-
-where $\Gamma^i$ is the set of all internal volume faces (i.e. all faces excluding those in $\Gamma$) and where the
-single-valued solution trace unknowns, $u^*$, have been introduced.Introducing the \textit{jump}
-operator,~\eqref{eq:bilinear_pg_advection} can be expressed more compactly as
-\begin{align}
-b(v,u) 
-=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} \nabla v \cdot \varv{b} u\ d\fe{V_v}
-+ \frac{1}{2} \int_{\fe{F}_v} \jump{\varv{v}} \cdot \varv{b} u^*\ d\fe{F}_v, \label{eq:bilinear_pg_advection_jump}
-\end{align}
-
-where $\jump{\varv{v}} = v^- \varv{\hat{n}}^- + v^+ \varv{\hat{n}}^+$ with the additional specification of $v^-
-\varv{\hat{n}}^- = v^+ \varv{\hat{n}}^+$ \makered{Check outflow convention from Bui-Thanh}
-
-
-

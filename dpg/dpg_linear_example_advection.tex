@@ -1,0 +1,142 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A Concrete Example: Linear Advection}
+
+Consider the steady linear advection equation as a model problem
+\begin{subequations}
+\begin{align}
+& \varv{b} \cdot \nabla \vars{u} = s && \text{in}\ \Omega, \label{eq:linear_advection_omega} \\
+& u = u_{\Gamma}\ && \text{on}\ \Gamma \coloneqq \{ \varv{x} \in \partial\Omega : \varv{\hat{n}} \cdot b < 0 \},
+\end{align}
+\end{subequations}
+
+where $\varv{b}$ is the advection velocity and $\varv{\hat{n}}$ is the outward pointing normal vector. Partitioning the
+domain with $N_v$ non-overlapping volumes, $\fe{V}$, with faces, $\fe{F}_v \coloneqq \partial \fe{V}_v$, such that
+$\Omega_h = \sum_{v=1}^{N_v}$, \makered{(Check notation with Brenner)},~\eqref{eq:linear_advection_omega} is multiplied
+by a test function $v$ and integrated by parts to give the bilinear and linear forms
+\begin{subequations} \label{eq:variational_form_advection}
+\begin{align}
+b(v,\varg{u}) 
+=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} - \nabla v \cdot \varv{b} u\ d\fe{V_v} + \int_{\fe{F}_v \cap \Gamma^i} v
+\varv{\hat{n}} \cdot \varv{b} u^*\ d\fe{F}_v, \label{eq:bilinear_pg_advection}\\
+l(v)
+=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} v s\ d\fe{V_v} + \int_{\fe{F}_v \cap \Gamma} v \varv{\hat{n}} \cdot \varv{b}
+u_{\Gamma}\ d\fe{F}_v,
+\end{align}
+\end{subequations}
+
+where $\Gamma^i$ is the set of all internal volume faces (i.e. all faces excluding those in $\Gamma$) and where the
+single-valued solution trace unknowns, $u^*$, have been introduced as part of the group variable $\varg{u} \coloneqq
+(u,u^*)$.~\eqref{eq:bilinear_pg_advection} can be expressed more compactly as
+\begin{align} \label{eq:bilinear_pg_advection_jump}
+b(v,\varg{u}) 
+=\ & \sum_{v=1}^{N_v} \int_{\fe{V}_v} - \nabla v \cdot \varv{b} u\ d\fe{V_v}
++ \frac{1}{2} \int_{\fe{F}_v} \jump{v} \varv{\hat{n}} \cdot \varv{b} u^*\ d\fe{F}_v,
+\end{align}
+
+after introducing the \textit{jump} operator, $\jump{v} = v^- - v^+ $, with ``$-$'' and ``$+$'' referring to the
+internal and external volumes adjacent to the face and with the additional specification of $v^+ = \pm v^-$ on
+inflow/outflow boundaries, respectively. Following the motivation of pursuing norms where the continuity and inf-sup
+constants are equal, the Cauchy-Schwarz inequality can be applied to~\eqref{eq:bilinear_pg_advection_jump} to obtain
+\begin{align} \label{eq:cauchy_scwarz_advection}
+b(v,\varg{u})
+\le\ & \sum_{v=1}^{N_v}
+|| - \nabla v \cdot \varv{b} ||_{L^2(\fe{V}_v)} || u ||_{L^2(\fe{V}_v)}
++
+\frac{1}{2} ||\jump{v}||_{L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)}
+||u^*||_{L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)} \\
+\le\ &
+\underbrace{\left(
+\sum_{v=1}^{N_v} || - \nabla v \cdot \varv{b} ||^2_{L^2(\fe{V}_v)} + \frac{1}{\sqrt{2}} ||\jump{v}||^2_{L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)}
+\right)^\frac{1}{2}}_{||v||_\fspace{V}}
+\times
+\underbrace{\left(
+\sum_{v=1}^{N_v} || u ||^2_{L^2(\fe{V}_v)} + \frac{1}{\sqrt{2}} ||u^*||^2_{L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)}
+\right)^\frac{1}{2}}_{||u||_\fspace{U}}.
+\end{align}
+% Note that the above is a norm on $\fspace{V}$ because constants are accounted for by the trace term.
+
+Above, $\varg{u} \in \fspace{U} = L^2(\Omega_h) \times L^2_{\varv{\hat{n}}\cdot\varv{b}}(\Gamma_h^i \cup
+\Gamma_h)$ and $v \in \fspace{V} = H^1_\vect{b}(\Omega_h)$ where the spaces are defined according to
+\begin{align}
+L^2(\Omega_h)
+=\ & \{ u : u \in L^2(\fe{V}_v)\ \forall \fe{V}_v \in \Omega_h \}, \\
+L^2_{\varv{\hat{n}}\cdot\varv{b}}(\Gamma_h^i \cup \Gamma_h)
+=\ & \{ \hat{u} : \hat{u} \in L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)\ \forall \fe{V}_v \in \Omega_h \}, \\
+H^1_{\vect{b}}(\Omega_h)
+=\ & \{ v : v \in L^2(\Omega_h),\ \vect{b} \cdot \nabla v \in L^2(\Omega_h) \},
+\end{align}
+
+where
+\begin{align}
+L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)
+=\ & \left\{ \hat{w} : || \hat{w} ||^2_{L^2_{\varv{\hat{n}}\cdot\varv{b}}(\fe{F}_v)} = \int_{\fe{F}_v} |\vect{\hat{n}} \cdot
+\vect{b}| |\hat{w}|^2 d\fe{F}_v < \infty \right\}.
+\end{align}
+
+\makered{Note that the above is not a norm because of the possibility of $\varv{\hat{n}}\cdot\varv{b} = 0$. Is this a
+problem?} The equality in~\eqref{eq:cauchy_scwarz_advection} is attained, as required by~\eqref{eq:bui_thanh_2-6}, if
+the test functions are chosen such that
+\begin{align}
+u =\ & -\nabla v_u \cdot \vect{b} && \text{in}\ \fe{V}_v, \\
+u^* =\ & \sign{\vect{\hat{n}} \cdot \vect{b}} \jump{v_u} && \text{on}\ \fe{F}_v.
+\end{align}
+
+In general, for basis functions of the form $\varg{\hat{\phi}} = (0,\hat{\phi}) \in \fspace{U}$,
+\begin{align}
+0 =\ & -\nabla v_{\hat{\phi}} \cdot \vect{b} && \text{in}\ \fe{V}_v, \label{eq:optimal_test_adv_trace_0} \\
+\hat{\phi} =\ & \sign{\vect{\hat{n}} \cdot \vect{b}} \jump{v_{\hat{\phi}}} && \text{on}\ \fe{F}_v,
+\label{eq:optimal_test_adv_trace_1}
+\end{align}
+
+and for basis functions $\varg{\phi} = (\phi,0) \in \fspace{U}$,
+\begin{align}
+\phi =\ & -\nabla v_{\phi} \cdot \vect{b} && \text{in}\ \fe{V}_v, \label{eq:optimal_test_adv_sol} \\
+0 =\ & \sign{\vect{\hat{n}} \cdot \vect{b}} \jump{v_{\phi}} && \text{on}\ \fe{F}_v.
+\label{eq:optimal_test_adv_sol_conforming}
+\end{align}
+
+Considering the test function for the $L^2$ component of the solution, it can be noted
+that~\eqref{eq:optimal_test_adv_sol_conforming} imposes a conformity constraint on the test space, resulting in a
+specific PG method from~\autoref{sec:PG_aspect_of_DPG}. However, recalling~\autoref{prop:pg_subset_of_dpg}, the same
+solution is obtained using the practical DPG methodology of~\autoref{sec:dpg_abstract_setting}, and this can be achieved
+by omitting the conformity constraint and limiting the support of each of the optimal test functions,
+\begin{align}
+\support{v_{\hat{\phi} \in \fe{F}_v}} =\ & \{ \fe{V}_i \in \Omega_h : \fe{V}_i \cap \fe{F}_v \ne \emptyset \}, \\
+\support{v_{\phi \in \fe{V}_v}} =\ & \{ \fe{V}_i \in \Omega_h : \fe{V}_i \cap \fe{V}_v \ne \emptyset \}.
+\end{align}
+
+\begin{proposition}
+If the localized test norm for the optimal test functions is given by 
+\begin{align}
+(w,v)_{\fspace{V}(\fe{V})}
+= 
+\int_{\fe{V}_v} (\nabla w \cdot \vect{b})(\nabla v \cdot \vect{b}) d\fe{V}_v
++
+\int_{\fe{F}_v} \jump{w} |\vect{\hat{n}} \cdot \vect{b}| \jump{v} d\fe{F}_v
+\end{align}
+\makered{Missing one additional constraint above. Think of elegant way to add constraint to average value of downwind.}
+
+for all volumes and faces in the support of the local test function, then the computed test functions for the trace
+unknowns satisfy~\eqref{eq:optimal_test_adv_trace_0} and~\eqref{eq:optimal_test_adv_trace_1} exactly (for polynomial
+test functions) and the trace solution computed after substituting the test functions into the variational
+form,~\eqref{eq:variational_form_advection}, is also exact \makered{(in 1D)}.
+
+\end{proposition}
+
+\begin{proof}
+So far only showed this numerically for a p1 1D modal basis.
+\end{proof}
+
+
+\makered{Where are we going with this?}
+\begin{itemize}
+\item Bui-Thanh2013's continuous method results in the recovery of the solution as the propagation of the boundary along
+the characteristics.
+\item Using the localized test norm: H1-semi + trace term, the trace test functions computed are exactly those
+satisfying the constraints above. Inserting these into the bilinear form results in pointwise exact solution for the
+trace unknowns (1D).
+\item Equivalent with DG using lowest order test?
+\end{itemize}
+\makered{Ask Legrand if he is interested in this result once finished typesetting (and likely after 2D attempt is made).}
+
+
