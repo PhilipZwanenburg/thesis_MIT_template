@@ -619,6 +619,7 @@ comment here
 \mathtoolsset{showonlyrefs} % Only number equations which are referred to in text.
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}{Proposition}[section]
+\newtheorem{remark}{Remark}[section]
 \newtheorem{corollary}{Corollary}[section]
 \newcommand{\propositionautorefname}{Proposition}
 \newcommand{\corollaryautorefname}{Corrolary}
@@ -654,6 +655,7 @@ comment here
 \newcommand{\jump}[1]{{\llbracket #1\rrbracket}}
 \newcommand{\sign}[1]{{\text{sgn}\left(#1\right)}}
 \newcommand{\support}[1]{{\text{supp}(#1)}}
+\newcommand{\spantext}[1]{{\text{span}#1}}
 
 \usepackage[cal=boondox]{mathalfa} % Add support for lowercase calligraphic letters
 

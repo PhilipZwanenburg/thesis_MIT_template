@@ -62,7 +62,7 @@ If the form satisfies the discrete inf-sup condition with inf-sup constant $\gam
 then Babu\v{s}ka's theorem~\cite[Theorem \makeblue{2.2}]{Babuska1971} demonstrates that the discrete problem,
 ~\eqref{eq:bilinear_abstract_finite}, is well-posed with the Galerkin error satisfying the error estimate,
 \begin{align} \label{eq:abstract_dpg_error}
-||u_h-u||_{\fspace{U}} \le \frac{M}{\gamma_h} \inf_{w_h \in \fspace{U}_h} ||w_h-u||_{\fspace{U}}.
+||u-u_h||_{\fspace{U}} \le \frac{M}{\gamma_h} \inf_{w_h \in \fspace{U}_h} ||u-w_h||_{\fspace{U}}.
 \end{align}
 
 where the original constant in the bound, $\left( 1 + \frac{M}{\gamma_h} \right)$~\cite[eq. (\makeblue{2.14})]{Babuska1971}, has been
@@ -91,7 +91,7 @@ where $v_u$ is termed an optimal test function for the trial function $u$. Furth
 that~\eqref{eq:bui_thanh_2-6} holds,~\eqref{eq:equal_m_gamma} is satisfied when the discrete test space is defined by
 \begin{align} \label{eq:def_discrete_test_space}
 \fspace{V} \supset \fspace{V}_h 
-= span \{ v_{u_h} \in \fspace{V} : u_h \in \fspace{U}_h \subseteq \fspace{U},\ b(v_{u_h},u_h) 
+= \spantext{ \{ v_{u_h} \in \fspace{V} : u_h \in \fspace{U}_h \subseteq \fspace{U},\ b(v_{u_h},u_h) }
 = ||v_{u_h}||_{\fspace{V}} ||u_h||_{\fspace{U}} \};
 \end{align}
 
@@ -104,7 +104,7 @@ see Bui-Thanh et al.~\cite[Lemma \makeblue{2.8}]{BuiThanh2013}. Defining the map
 where $(\cdot,\cdot)_{\fspace{V}}$ represents the test space inner product, then the discrete test
 space,~\eqref{eq:def_discrete_test_space}, is equivalently defined as
 \begin{align} \label{eq:def_discrete_test_space_alt}
-\fspace{V}_h = span \{ v_{T u_h} \in \fspace{V} : u_h \in \fspace{U}_h \};
+\fspace{V}_h = \spantext{ \{ v_{T u_h} \in \fspace{V} : u_h \in \fspace{U}_h \} };
 \end{align}
 
 see Bui-Thanh et al.~\cite[Theorem \makeblue{2.9}]{BuiThanh2013}. Defining the Riesz operator for the test inner
@@ -181,7 +181,7 @@ functions,~\eqref{eq:auxiliary_opt_v_infinite}, is infinite dimensional. In prac
 
 where the corresponding approximate optimal test space is, analogous to~\eqref{eq:def_discrete_test_space_alt}, defined by
 \begin{align} \label{eq:def_discrete_test_space_alt_approx}
-\afspace{V}_h = span \{ \tilde{v}_{T u_h} \in \afspace{V} : u_h \in \fspace{U}_h \}.
+\afspace{V}_h = \spantext{ \{ \tilde{v}_{T u_h} \in \afspace{V} : u_h \in \fspace{U}_h \} }.
 \end{align}
 
 \makered{Potentially add comment regarding account for the approximation of optimal test functions \cite[eqs. (4.30) -
