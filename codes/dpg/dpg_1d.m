@@ -1,4 +1,4 @@
-format short
+format shorte
 clear,clc,
 addpath external
 addpath external/Hesthaven
@@ -7,10 +7,10 @@ addpath external/Hesthaven
 % Step function v_f:                    = Still possible?
 
 % [alpha,beta,gamma] >= 0; sum(alpha:gamma) > 0.
-alpha = 2;
-beta  = 3;
-gamma = 4;
-h = 1/2^4;
+%alpha = 1; beta  = 0; gamma = 0;
+alpha = 2; beta  = 3; gamma = 4;
+alpha = 1; gamma = 3; beta = -gamma;
+h = 1/2^1;
 
 basis = 'm'
 ps = 2;
@@ -64,7 +64,11 @@ K = [
 ];
 
 cond(K)
-v_f_coef = K\b % OK! Exact step.
+v_f_coef = K\b;
+
+n_coef = size(v_f_coef,1)/2;
+v_f_coef_l = v_f_coef((1:n_coef)+0)
+v_f_coef_r = v_f_coef((1:n_coef)+n_coef)
 
 % v_s
 psi_rv = phi(p,r)*T;
@@ -101,16 +105,22 @@ p_p = 20;
 
 phi_p = phi(p,r_p)*T;
 v_s = phi_p*v_s_coef;
+v_fl = phi_p*v_f_coef_l;
+v_fr = phi_p*v_f_coef_r;
 
 clf; hold on;
-subplot(3,1,1); hold on; grid on;
+subplot(4,1,1); hold on; grid on;
+plot(r_p-1,v_fl,'-bo');
+plot(r_p+1,v_fr,'-bo');
+
+subplot(4,1,2); hold on; grid on;
 plot(r_p,v_s(:,1),'-bo');
 if (ps > 0)
-subplot(3,1,2); hold on; grid on;
+subplot(4,1,3); hold on; grid on;
 plot(r_p,v_s(:,2),'-bo');
 end
 if (ps > 1)
-subplot(3,1,3); hold on; grid on;
+subplot(4,1,4); hold on; grid on;
 plot(r_p,v_s(:,3),'-bo');
 end
 
@@ -120,7 +130,9 @@ end
 
 
 
-% Check
+% Checking
+
+% v_s
 ind = 0;
 grad_psi_rv'*W*(2/h*grad_psi_rv*v_s_coef(:,ind+1)+phi_rv(:,ind+1)) ...
 + (alpha+beta)*psi_p1'*psi_p1*v_s_coef(:,ind+1) ...
@@ -143,5 +155,38 @@ elseif (ind == 1)
 	psi_p1'*v_ex(1)
 end
 
-subplot(3,1,ind+1);
+subplot(4,1,ind+2);
 plot(r_p,v_ex(r_p),'-rs');
+
+% v_f
+
+
+
+A = [
+alpha+2*beta+gamma alpha-gamma -beta beta;
+alpha-gamma 4/h+alpha+2*beta+gamma -beta beta;
+-beta -beta alpha+2*beta+gamma alpha-gamma;
+beta beta alpha-gamma 4/h+alpha+2*beta+gamma;
+];
+
+b = [1 1 -1 1]';
+
+tmp = A\b
+a0_l = tmp(1);
+a1_l = tmp(2);
+a0_r = tmp(3);
+a1_r = tmp(4);
+
+vl_ex = @(r) [a0_l+a1_l*r];
+vr_ex = @(r) [a0_r+a1_r*r];
+
+subplot(4,1,1);
+plot(r_p-1,vl_ex(r_p),'rs');
+plot(r_p+1,vr_ex(r_p),'rs');
+
+a_lr = [
+((alpha*gamma-gamma^2)*h+alpha);
+0;
+-((alpha^2-alpha*gamma)*h+2*alpha)/2;
+(alpha^2-alpha*gamma)*h/2;
+]/(alpha^2-2*alpha*gamma-(alpha*gamma^2-gamma^3)*h)
