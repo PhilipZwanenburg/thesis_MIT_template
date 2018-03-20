@@ -39,7 +39,7 @@
 \newcommand{\vect}[1]{\mathbf{{#1}}}
 \newcommand{\mat}[1]{\mathbf{{#1}}}
 
-\title{Optimal Test Functions for Linear Advection}
+\title{Optimal Test Inner Product for Linear Advection}
 \author{Philip Zwanenburg}
 
 \begin{document}
@@ -49,23 +49,113 @@
 %%% Begin Modifiable parameters. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\begin{sagesilent}
-%\end{sagesilent}
+\begin{sagesilent}
+var('a,b,c')
+assume(a>=0)
+assume(b>=0)
+assume(c>=0)
+
+c = a
+\end{sagesilent}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% End Modifiable parameters.   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 \begin{sagesilent}
-var('a,b,c')
 var('h')
+var('r')
 var('i,j,k,l')
+
 assume(i,j,k,l,'integer')
 \end{sagesilent}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Face Test Functions}
+\section{Test Functions}
+
+It has been noted that under specific norms, the optimal test functions are given by polynomials one degree higher than
+that of the corresponding solution basis. Below, the analytical expressions for the test functions are obtained and they
+are then substituted into the bilinear form to determine the associated induced norms. For the 1D case under
+consideration, with volumes numbered from $1$ to $n$ and face nodes numbered from $0$ to $n$, we choose to work with the
+general test norm
+\begin{align*}
+(w,v) = \sum_{i=1}^{n}
+\int_{-1}^{1} \frac{2}{h} w_i^{'}v_i^{'}
++ a w_i(1)v_i(1)
++ b(w_i(1)-w_{i+1}(-1))(v_i(1)-v_{i+1}(-1))
++ c w_{i+1}(-1)v_{i+1}(-1).
+\end{align*}
+
+Optimal test functions for a given basis function are then found by solving the following system of equations
+\begin{align} \label{eq:eq_for_v}
+(w,v) = b(w,\phi)\ \forall w \in V
+\end{align}
+
+where $\phi$ denotes a basis function from the trial space.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Volume Test Functions}
+
+It was observed numerically, when using the Legendre polynomials as volume solution basis functions, that all associated
+test functions except that of the constant basis are zero at both edges of the reference element. Further, they all
+satisfy~\eqref{eq:eq_for_v} exactly when the test space is one order higher than the solution space. Consequently, only
+the $p0$ test function need be computed. Noting that the $p0$ test function is linear, represented as
+\begin{align*}
+v_{{\phi}_{i,0}} = a_0 + a_1 r,
+\end{align*}
+
+it can be determined by solving the following equation for the coefficients, for the general form of the test norm
+\begin{align*}
+\int_{-1}^{1} \frac{2}{h} w_i^{'} v_i^{'} dr + (a+b)(w_i(1)v_i(1))+(b+c)(w_i(-1)v_i(-1))
+= 
+\int_{-1}^{1} -w_i^{'} \phi dr,\ \forall w_i \in \mathcal{P}^1,
+\end{align*}
+
+where $\phi_0 = \frac{1}{\sqrt{2}}$, and $\mathcal{P}^p$ is the space of all polynomials of degree less than order
+equal to $p$. Choosing $w_i = 1$ and $w_i = r$, we obtain the following equalities
+\begin{align*}
+0 + (a+b)((1)v_i(1))+(b+c)((1)v_i(-1)) 
+& =
+0, \\
+\int_{-1}^{1} \frac{2}{h} (1) v_i^{'} dr + (a+b)((1)v_i(1))+(b+c)((-1)v_i(-1))
+& = 
+\int_{-1}^{1} (-1) \frac{1}{\sqrt{2}} dr.
+\end{align*}
+
+Substituting the general expression for $v_{{\phi}_{i,0}}$, we obtain the coefficients by solving the following linear
+system
+\begin{sagesilent}
+n = 2
+AV = matrix(SR,n,n,[[a+2*b+c,a-c],
+                    [a-c,4/h+a+2*b+c],
+                   ])
+BV = matrix(SR,n,1,[0,-2/sqrt(2)])
+
+VVCoef = AV\BV
+for i in range(0,n):
+    VVCoef[i] = (VVCoef[i]).apply_map(lambda x: x.rational_simplify().expand().full_simplify())
+\end{sagesilent}
+
+\[
+\mat{A} \hat{\vect{v}} = \vect{b}
+\]
+
+where
+\[
+\mat{A} = \sage{AV},\ \vect{b} = \sage{BV},\ \text{and}\ \hat{\vect{v}} = [a_0,a_1]^T.
+\]
+
+The result is
+\begin{sagesilent}
+VPhi0 = VVCoef[0]+VVCoef[1]*r
+\end{sagesilent}
+
+\[
+v_{{\phi}_{i,0}} = \sage{VPhi0}.
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Face Test Functions}
 
 The linear test functions on either side of the 1D face (point) take the exact form:
 \begin{align*}
@@ -76,31 +166,39 @@ The linear test functions on either side of the 1D face (point) take the exact f
 The coefficients can be computed by solving the following linear system
 
 \begin{sagesilent}
-assume(a>0)
-#c = 0
-b = -c
+n = 4
+AF = matrix(SR,n,n,[[a+2*b+c,a-c,-b,b],
+                    [a-c,4/h+a+2*b+c,-b,b],
+                    [-b,-b,a+2*b+c,a-c],
+                    [b,b,a-c,4/h+a+2*b+c]
+                   ])
+BF = matrix(SR,n,1,[1,1,-1,1])
 
-A = matrix(SR,4,4)
-A[:,:] = matrix(4,4,[[a+2*b+c,a-c,-b,b],
-                     [a-c,4/h+a+2*b+c,-b,b],
-                     [-b,-b,a+2*b+c,a-c],
-                     [b,b,a-c,4/h+a+2*b+c]
-                    ])
-b = matrix(SR,4,1,[1,1,-1,1])
-
-coef = A\b
-for i in range(0,4):
-    coef[i] = (coef[i]).apply_map(lambda x: x.rational_simplify().expand().full_simplify())
+VFCoef = AF\BF
+for i in range(0,n):
+    VFCoef[i] = (VFCoef[i]).apply_map(lambda x: x.rational_simplify().expand().full_simplify())
 \end{sagesilent}
 
-
 \[
-\mat{A} = \sage{A}.
+\mat{A} \hat{\vect{f}} = \vect{b}
 \]
 
+where
 \[
-\vect{coef} = \sage{coef}.
+\mat{A} = \sage{AF},\ \vect{b} = \sage{BF},\ \text{and}\ \hat{\vect{f}} = [a_0^l,a_1^l,a_0^r,a_1^r]^T.
 \]
+
+The result is
+\begin{sagesilent}
+VPhiHatL = VFCoef[0]+VFCoef[1]*r
+VPhiHatR = VFCoef[2]+VFCoef[3]*r
+\end{sagesilent}
+
+\begin{align*}
+& v_{\hat{\phi}_i}^l = \sage{VPhiHatL}, \\
+& v_{\hat{\phi}_i}^r = \sage{VPhiHatR}.
+\end{align*}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

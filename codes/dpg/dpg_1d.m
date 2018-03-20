@@ -6,11 +6,11 @@ addpath external/Hesthaven
 % Demkowicz2011:     [alpha,beta,gamma] = [1 0 0]
 % Step function v_f:                    = Still possible?
 
-% [alpha,beta,gamma] >= 0; sum(alpha:gamma) > 0.
-%alpha = 1; beta  = 0; gamma = 0;
-alpha = 2; beta  = 3; gamma = 4;
-alpha = 1; gamma = 3; beta = -gamma;
-h = 1/2^1;
+h = 1/2^2;
+% [alpha,beta,gamma] >= 0; alpha+beta+gamma > 0.
+%alpha = 2; beta  = 0; gamma = 0;
+alpha = 0; beta  = 0; gamma = 2;
+alpha = 2; beta  = 3; gamma = 2;
 
 basis = 'm'
 ps = 2;
