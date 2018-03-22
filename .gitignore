@@ -6,7 +6,15 @@
 *.lot
 *.out
 *.toc
-*.sagetex.*
+*.sage
+*.*.sage
+*.*.*.py
+*.sagetex.scmd
+*.sagetex.sout
+*[*\.]sout
+sage/dpg_linear_advection/*
+!sage/dpg_linear_advection/*.pdf
+!sage/dpg_linear_advection/*.tex
 
 *.gz
 *.swp

@@ -19,6 +19,7 @@
 }
 
 \usepackage{amsmath,amsthm,amssymb,mathtools,bm}
+\mathtoolsset{showonlyrefs} % Only number equations which are referred to in text.
 
 \usepackage[margin=1in]{geometry}
 
@@ -36,8 +37,12 @@
 \newcommand{\makered}[1]{{\color{red}#1}}
 \newcommand{\makeblue}[1]{{\color{blue}#1}}
 
+\newcommand{\varg}[1]{\mathit{\bm{{#1}}}} % 'g'roup  'var'iable
 \newcommand{\vect}[1]{\mathbf{{#1}}}
 \newcommand{\mat}[1]{\mathbf{{#1}}}
+
+\usepackage{stmaryrd} % For jump operator brackets
+\newcommand{\jump}[1]{{\llbracket #1\rrbracket}}
 
 \title{Optimal Test Inner Product for Linear Advection}
 \author{Philip Zwanenburg}
@@ -55,7 +60,8 @@ assume(a>=0)
 assume(b>=0)
 assume(c>=0)
 
-c = a
+#c = a;
+b = 0; c = 0;
 \end{sagesilent}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -73,18 +79,42 @@ assume(i,j,k,l,'integer')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Test Functions}
 
+For the 1D case under consideration, with volumes numbered from $1$ to $n$ and face nodes numbered from $0$ to $n$, the
+bilinear form associated with the steady linear advection equation (assuming a unit advection velocity) is given by
+\begin{align} \label{eq:bilinear_adv}
+b(v,\varg{u}) 
+& = \sum_{i=1}^n -\int_{-1}^{1} v_i^{'} u_i dr - v_i(-1)f_{i-1}+v_{i}(1))f_i\ \forall v
+%\\
+%& = \sum_{i=1}^n -\int_{-1}^{1} v_i^{'} u_i dr + \sum_{i=0}^n \jump{v} f_i,\ \forall v.
+\end{align}
+
+Above, $\varg{u} \coloneqq (u,f)$ is the group variable for the solution and trace flux components, and $v$ is a test
+function and where all quantities have been transferred to the reference volume and face.
+%The \textit{jump} operator, $\jump{v} = v^- - v^+ $, was also introduced with ``$-$'' and ``$+$'' referring to the
+%volumes adjacent to the face with the normal vector pointing outwards/inwards, respectively, and with the additional
+%specification of $v^+ = \pm v^-$ on inflow/outflow boundaries, respectively. Following the motivation of pursuing norms
+\\~
+
 It has been noted that under specific norms, the optimal test functions are given by polynomials one degree higher than
-that of the corresponding solution basis. Below, the analytical expressions for the test functions are obtained and they
-are then substituted into the bilinear form to determine the associated induced norms. For the 1D case under
-consideration, with volumes numbered from $1$ to $n$ and face nodes numbered from $0$ to $n$, we choose to work with the
-general test norm
-\begin{align*}
+that of the corresponding solution basis~\cite[Section \makeblue{3C}]{Demkowicz2011}. Below, the analytical expressions
+for the test functions are obtained and they are then substituted into the bilinear form to determine the associated
+    induced norms. We choose to work with the general test norm
+\begin{align}
 (w,v) = \sum_{i=1}^{n}
-\int_{-1}^{1} \frac{2}{h} w_i^{'}v_i^{'}
+\int_{-1}^{1} \frac{2}{h} w_i^{'}v_i^{'} dr
 + a w_i(1)v_i(1)
++ c w_{i}(-1)v_{i}(-1)
++ \sum_{i=0}^{n}
 + b(w_i(1)-w_{i+1}(-1))(v_i(1)-v_{i+1}(-1))
-+ c w_{i+1}(-1)v_{i+1}(-1).
-\end{align*}
+\end{align}
+
+where it is to be assumed that quantities not present in the domain are omitted in the last summation. Note that this test
+norm recovers that of Demkowicz et al. from the first DPG paper~\cite[Section \makeblue{2C}]{Demkowicz2011} when
+selecting the parameters in the norm above as $a = \alpha_i, b = 0, c = 0$. In this report we have taken the values of
+the parameters to be constant for all elements and equal to
+\begin{align}
+[a,b,c] = [\sage{a},\sage{b},\sage{c}].
+\end{align}
 
 Optimal test functions for a given basis function are then found by solving the following system of equations
 \begin{align} \label{eq:eq_for_v}
@@ -96,31 +126,32 @@ where $\phi$ denotes a basis function from the trial space.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Volume Test Functions}
 
-It was observed numerically, when using the Legendre polynomials as volume solution basis functions, that all associated
-test functions except that of the constant basis are zero at both edges of the reference element. Further, they all
-satisfy~\eqref{eq:eq_for_v} exactly when the test space is one order higher than the solution space. Consequently, only
-the $p0$ test function need be computed. Noting that the $p0$ test function is linear, represented as
-\begin{align*}
+It can be observed, when using the Legendre polynomials as volume solution basis functions, that all associated
+test functions except that of the constant basis are zero at both edges of the reference element~\cite[Section
+5.1]{BuiThanh2013}. Further, they all satisfy~\eqref{eq:eq_for_v} exactly when the test space is one order higher than
+the solution space. Consequently, only the $p_0$ test function needs to be computed. Noting that the $p_0$ test function is
+linear, represented as
+\begin{align}
 v_{{\phi}_{i,0}} = a_0 + a_1 r,
-\end{align*}
+\end{align}
 
 it can be determined by solving the following equation for the coefficients, for the general form of the test norm
-\begin{align*}
+\begin{align}
 \int_{-1}^{1} \frac{2}{h} w_i^{'} v_i^{'} dr + (a+b)(w_i(1)v_i(1))+(b+c)(w_i(-1)v_i(-1))
 = 
 \int_{-1}^{1} -w_i^{'} \phi dr,\ \forall w_i \in \mathcal{P}^1,
-\end{align*}
+\end{align}
 
 where $\phi_0 = \frac{1}{\sqrt{2}}$, and $\mathcal{P}^p$ is the space of all polynomials of degree less than order
 equal to $p$. Choosing $w_i = 1$ and $w_i = r$, we obtain the following equalities
-\begin{align*}
+\begin{align}
 0 + (a+b)((1)v_i(1))+(b+c)((1)v_i(-1)) 
 & =
 0, \\
 \int_{-1}^{1} \frac{2}{h} (1) v_i^{'} dr + (a+b)((1)v_i(1))+(b+c)((-1)v_i(-1))
 & = 
 \int_{-1}^{1} (-1) \frac{1}{\sqrt{2}} dr.
-\end{align*}
+\end{align}
 
 Substituting the general expression for $v_{{\phi}_{i,0}}$, we obtain the coefficients by solving the following linear
 system
@@ -136,32 +167,32 @@ for i in range(0,n):
     VVCoef[i] = (VVCoef[i]).apply_map(lambda x: x.rational_simplify().expand().full_simplify())
 \end{sagesilent}
 
-\[
+\begin{align}
 \mat{A} \hat{\vect{v}} = \vect{b}
-\]
+\end{align}
 
 where
-\[
+\begin{align}
 \mat{A} = \sage{AV},\ \vect{b} = \sage{BV},\ \text{and}\ \hat{\vect{v}} = [a_0,a_1]^T.
-\]
+\end{align}
 
 The result is
 \begin{sagesilent}
-VPhi0 = VVCoef[0]+VVCoef[1]*r
+VPhi0 = (VVCoef[0]+VVCoef[1]*r)[0]
 \end{sagesilent}
 
-\[
+\begin{align} \label{eq:v_opt_vol_p0}
 v_{{\phi}_{i,0}} = \sage{VPhi0}.
-\]
+\end{align}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Face Test Functions}
 
 The linear test functions on either side of the 1D face (point) take the exact form:
-\begin{align*}
+\begin{align}
 & v_{\hat{\phi}_i}^l = a_0^l + a_1^l r,\\
 & v_{\hat{\phi}_i}^r = a_0^r + a_1^r r.
-\end{align*}
+\end{align}
 
 The coefficients can be computed by solving the following linear system
 
@@ -179,32 +210,94 @@ for i in range(0,n):
     VFCoef[i] = (VFCoef[i]).apply_map(lambda x: x.rational_simplify().expand().full_simplify())
 \end{sagesilent}
 
-\[
+\begin{align}
 \mat{A} \hat{\vect{f}} = \vect{b}
-\]
+\end{align}
 
 where
-\[
+\begin{align}
 \mat{A} = \sage{AF},\ \vect{b} = \sage{BF},\ \text{and}\ \hat{\vect{f}} = [a_0^l,a_1^l,a_0^r,a_1^r]^T.
-\]
+\end{align}
 
 The result is
 \begin{sagesilent}
-VPhiHatL = VFCoef[0]+VFCoef[1]*r
-VPhiHatR = VFCoef[2]+VFCoef[3]*r
+VPhiHatL = (VFCoef[0]+VFCoef[1]*r)[0]
+VPhiHatR = (VFCoef[2]+VFCoef[3]*r)[0]
 \end{sagesilent}
 
-\begin{align*}
+\begin{align}
 & v_{\hat{\phi}_i}^l = \sage{VPhiHatL}, \\
 & v_{\hat{\phi}_i}^r = \sage{VPhiHatR}.
-\end{align*}
+\end{align}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implied Energy Norm}
+% Note: Dividing quantities by BasisU0 such that we include its contribution in u_{i,0} = BasisU0*coef_u_{i,0}.
+\begin{sagesilent}
+dVPhi0 = diff(VPhi0,r)
+BasisU0 = sqrt(1/2)
+dVPhi0U = (dVPhi0/BasisU0).rational_simplify()
+\end{sagesilent}
+
+The implied energy norm is obtained by substituting the optimal test functions into the bilinear form as discussed by 
+Demkowicz et al.~\cite[eq. \makeblue{(2.8)} and Proposition \makeblue{2.2}]{Demkowicz2011}. Substituting the $p_0$
+optimal test function,~\eqref{eq:v_opt_vol_p0}, into the bilinear form,~\eqref{eq:bilinear_adv}, after multiplication by
+the solution coefficients
+\begin{align}
+b(v_{u_{0}},\varg{u}) 
+& = \sum_{i=1}^n
+\int_{-1}^{1} \sage{(-dVPhi0U).rational_simplify()} u_{i,0}u_i dr
+- \left( \sage{(VPhi0.subs({r:-1})/BasisU0).rational_simplify()} \right) u_{i,0}f_{i-1}
++ \left( \sage{(VPhi0.subs({r:1})/BasisU0).rational_simplify()} \right) u_{i,0}f_i
+\end{align}
+
+where $u_{i,0} = \frac{1}{h} \int_{x_{i-1}}^{x_i} u dx = \frac{1}{2} \int_{-1}^{1} u dr$ denotes the average of
+$u_i$ in volume $i$. Noting the property discussed above of all other integrated Legendre polynomials taking values of
+zero at $r = \pm 1$, we have
+\begin{align}
+b(v_{u_{j>0}},\varg{u}) 
+& = \sum_{i=1}^n
+\int_{-1}^{1} \frac{h}{2} (u_i-u_{i,0})u_i dr.
+\end{align}
+
+Summing the two contributions
+\begin{align}
+b(v_{u},\varg{u}) 
+& = \sum_{i=1}^n
+\int_{-1}^{1} \frac{h}{2} u_i^2 dr
+- \left( \sage{(VPhi0.subs({r:-1})/BasisU0).rational_simplify()} \right) u_{i,0}f_{i-1}
++ \left( \sage{(VPhi0.subs({r:1})/BasisU0).rational_simplify()} \right) u_{i,0}f_i.
+\end{align}
+\makered{Needs extra volume term for cases where it is not zero.}\\~
+
+Considering the optimal test functions for the fluxes,
+\begin{sagesilent}
+var('fl,fr')
+MultFlr1 = (VPhiHatL.subs({r:-1})).rational_simplify()
+MultFrr  = (VPhiHatL.subs({r:1})).rational_simplify()
+MultFll  = (VPhiHatR.subs({r:-1})).rational_simplify()
+MultFlr2 = (VPhiHatR.subs({r:1})).rational_simplify()
+\end{sagesilent}
+
+\begin{align}
+b(v_{f},\varg{u}) 
+= \sum_{i=1}^n
+& \int_{-1}^{1} \left( \sage{(-diff(VPhiHatL,r)).rational_simplify()} \right) f_{i}u_{i} dr
+- \left( \sage{MultFlr1} \right) f_{i} f_{i-1}
++ \left( \sage{MultFrr}  \right) f_{i}^2 \\
++ & \int_{-1}^{1} \left( \sage{(-diff(VPhiHatR,r)).rational_simplify()} \right) f_{i-1}u_{i} dr
+- \left( \sage{MultFll} \right) f_{i-1}^2
++ \left( \sage{MultFlr2}  \right) f_{i-1}f_{i}
+\end{align}
+
+% Use .factor() to combine expanded terms.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section*{References}
 
-%\bibliographystyle{elsarticle-num}
-%\bibliography{../code.bib}
+\bibliographystyle{elsarticle-num}
+\bibliography{../../PhD_Thesis.bib}
 
 \end{document}
