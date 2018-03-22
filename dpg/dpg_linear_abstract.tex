@@ -81,8 +81,10 @@ M = \gamma_h,
 so that the error incurred by the discrete approximation in~\eqref{eq:abstract_dpg_error} is smallest. As it is not
 immediately clear which norms should be selected for the trial and test spaces, the simplest strategy is to let the norm
 be chosen as that which is naturally induced by the problem such that~\eqref{eq:equal_m_gamma} is satisfied. Bui-Thanh
-et al.~\cite[Theorem \makeblue{2.6}]{BuiThanh2013} have proven that $M = \gamma = 1$ if
+et al.~\cite[Theorem \makeblue{2.6}]{BuiThanh2013} have proven that
 \begin{align} \label{eq:bui_thanh_2-6}
+M = \gamma = 1
+\iff
 \exists v_u \in \fspace{V}\ \setminus \{0\} :
 b(v_u,u) = ||v_u||_{\fspace{V}} ||u||_{\fspace{U}}\ \forall u \in \fspace{U} \setminus \{0\},
 \end{align}
@@ -184,8 +186,8 @@ where the corresponding approximate optimal test space is, analogous to~\eqref{e
 \afspace{V}_h = \spantext{ \{ \tilde{v}_{T u_h} \in \afspace{V} : u_h \in \fspace{U}_h \} }.
 \end{align}
 
-\makered{Potentially add comment regarding account for the approximation of optimal test functions \cite[eqs. (4.30) -
-(4.32)]{Demkowicz2014_overview}.}
+\makered{Potentially add comment regarding accounting for the approximation of optimal test functions \cite[eqs. (4.30) -
+(4.32)]{Demkowicz2014_overview}. Relevant as there is no approximation error in the example below.}
 
 Noting that the test graph space is a subset of $(L^2(\Omega))^n$, it has been shown that the PG methodology
 of~\autoref{sec:PG_aspect_of_DPG} is, in fact, a subset of this practical DPG methodology where $L^2$-conforming test

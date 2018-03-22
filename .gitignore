@@ -15,6 +15,7 @@
 sage/dpg_linear_advection/*
 !sage/dpg_linear_advection/*.pdf
 !sage/dpg_linear_advection/*.tex
+sage/dpg_linear_advection/sage-plots-for-dpg_lin_adv.tex/
 
 *.gz
 *.swp

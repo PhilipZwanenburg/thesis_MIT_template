@@ -6,11 +6,12 @@ addpath external/Hesthaven
 % Demkowicz2011:     [alpha,beta,gamma] = [1 0 0]
 % Step function v_f:                    = Still possible?
 
-h = 1/2^2;
+h = 1/2^10;
 % [alpha,beta,gamma] >= 0; alpha+beta+gamma > 0.
 %alpha = 2; beta  = 0; gamma = 0;
 alpha = 0; beta  = 0; gamma = 2;
-alpha = 2; beta  = 3; gamma = 2;
+alpha = 0; beta  = h; gamma = 0;
+%alpha = 0; beta  = h; gamma = -h;
 
 basis = 'm'
 ps = 2;
@@ -184,9 +185,11 @@ subplot(4,1,1);
 plot(r_p-1,vl_ex(r_p),'rs');
 plot(r_p+1,vr_ex(r_p),'rs');
 
-a_lr = [
-((alpha*gamma-gamma^2)*h+alpha);
-0;
--((alpha^2-alpha*gamma)*h+2*alpha)/2;
-(alpha^2-alpha*gamma)*h/2;
-]/(alpha^2-2*alpha*gamma-(alpha*gamma^2-gamma^3)*h)
+if (alpha != 0 && gamma != 0)
+	a_lr = [
+	((alpha*gamma-gamma^2)*h+alpha);
+	0;
+	-((alpha^2-alpha*gamma)*h+2*alpha)/2;
+	(alpha^2-alpha*gamma)*h/2;
+	]/(alpha^2-2*alpha*gamma-(alpha*gamma^2-gamma^3)*h)
+end

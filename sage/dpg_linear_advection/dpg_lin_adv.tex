@@ -60,8 +60,10 @@ assume(a>=0)
 assume(b>=0)
 assume(c>=0)
 
-#c = a;
-b = 0; c = 0;
+hv = 1/2^2
+
+b = 0; c = 0; av = 2; bv = 0; cv = 0;
+#c = a; av = 2; bv = 3; cv = av;
 \end{sagesilent}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -109,10 +111,10 @@ for the test functions are obtained and they are then substituted into the bilin
 \end{align}
 
 where it is to be assumed that quantities not present in the domain are omitted in the last summation. Note that this test
-norm recovers that of Demkowicz et al. from the first DPG paper~\cite[Section \makeblue{2C}]{Demkowicz2011} when
-selecting the parameters in the norm above as $a = \alpha_i, b = 0, c = 0$. In this report we have taken the values of
+norm recovers that of Demkowicz et al. from the first DPG paper~\cite[Section \makeblue{2B}]{Demkowicz2011} when
+selecting the parameters in the norm above as $a = \alpha_i, b = 0, c = 0$. In this report, we have taken the values of
 the parameters to be constant for all elements and equal to
-\begin{align}
+\begin{align} \label{eq:parameter_selection}
 [a,b,c] = [\sage{a},\sage{b},\sage{c}].
 \end{align}
 
@@ -126,7 +128,7 @@ where $\phi$ denotes a basis function from the trial space.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Volume Test Functions}
 
-It can be observed, when using the Legendre polynomials as volume solution basis functions, that all associated
+It can be observed, when using the Legendre polynomials as volume trial basis functions, that all associated
 test functions except that of the constant basis are zero at both edges of the reference element~\cite[Section
 5.1]{BuiThanh2013}. Further, they all satisfy~\eqref{eq:eq_for_v} exactly when the test space is one order higher than
 the solution space. Consequently, only the $p_0$ test function needs to be computed. Noting that the $p_0$ test function is
@@ -153,8 +155,8 @@ equal to $p$. Choosing $w_i = 1$ and $w_i = r$, we obtain the following equaliti
 \int_{-1}^{1} (-1) \frac{1}{\sqrt{2}} dr.
 \end{align}
 
-Substituting the general expression for $v_{{\phi}_{i,0}}$, we obtain the coefficients by solving the following linear
-system
+Substituting the general expression for $v_{{\phi}_{i,0}}$, and the specified
+parameters,~\eqref{eq:parameter_selection}, we obtain the coefficients by solving the following linear system
 \begin{sagesilent}
 n = 2
 AV = matrix(SR,n,n,[[a+2*b+c,a-c],
@@ -178,12 +180,25 @@ where
 
 The result is
 \begin{sagesilent}
-VPhi0 = (VVCoef[0]+VVCoef[1]*r)[0]
+test_vol_phi0 = (VVCoef[0]+VVCoef[1]*r)[0]
 \end{sagesilent}
 
 \begin{align} \label{eq:v_opt_vol_p0}
-v_{{\phi}_{i,0}} = \sage{VPhi0}.
+v_{{\phi}_{i,0}} = \sage{test_vol_phi0}.
 \end{align}
+
+% Note: Best practice to compute the plot object in a "sagesilent" block to avoid interference from the standard latex
+% parser. See this link for an example: https://tex.stackexchange.com/a/179551.
+\begin{sagesilent}
+p = plot(test_vol_phi0(h=hv,a=av,b=bv,c=cv),r,-1,1)
+\end{sagesilent}
+
+\begin{figure}[!ht]
+	\centering%
+	\sageplot[width=.5\textwidth]{p}
+	\caption{Visualization of $p_0$ Test Function}
+	\label{fig:test_vol_p0}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Face Test Functions}
@@ -194,7 +209,7 @@ The linear test functions on either side of the 1D face (point) take the exact f
 & v_{\hat{\phi}_i}^r = a_0^r + a_1^r r.
 \end{align}
 
-The coefficients can be computed by solving the following linear system
+Exactly as for the volume test functions, the coefficients can be computed by solving the following linear system
 
 \begin{sagesilent}
 n = 4
@@ -230,26 +245,54 @@ VPhiHatR = (VFCoef[2]+VFCoef[3]*r)[0]
 & v_{\hat{\phi}_i}^r = \sage{VPhiHatR}.
 \end{align}
 
+\begin{sagesilent}
+pl = plot(VPhiHatL(h=hv,a=av,b=bv,c=cv,r=r+1),r,-2,0)
+pr = plot(VPhiHatR(h=hv,a=av,b=bv,c=cv,r=r-1),r,0,2)
+p = pl+pr
+\end{sagesilent}
+
+\begin{figure}[!ht]
+	\centering%
+	\sageplot[width=.5\textwidth]{p}
+	\caption{Visualization of Flux Test Function (Note: Has Support over Two Volumes)}
+	\label{fig:test_flux}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implied Energy Norm}
-% Note: Dividing quantities by BasisU0 such that we include its contribution in u_{i,0} = BasisU0*coef_u_{i,0}.
+% Note: Dividing quantities by phi_u0 such that we include its contribution in u_{i,0} = phi_u0*coef_u_{i,0}.
 \begin{sagesilent}
-dVPhi0 = diff(VPhi0,r)
-BasisU0 = sqrt(1/2)
-dVPhi0U = (dVPhi0/BasisU0).rational_simplify()
+dtest_vol_phi0 = diff(test_vol_phi0,r)
+phi_u0 = sqrt(1/2)
+dtest_vol_phi0U = (dtest_vol_phi0/phi_u0).rational_simplify()
+
+def print_nz(val,latex_string):
+  # Output the latex string if the input value is not zero.
+  if (val == 0):
+    return ''
+  return latex_string
 \end{sagesilent}
 
 The implied energy norm is obtained by substituting the optimal test functions into the bilinear form as discussed by 
 Demkowicz et al.~\cite[eq. \makeblue{(2.8)} and Proposition \makeblue{2.2}]{Demkowicz2011}. Substituting the $p_0$
 optimal test function,~\eqref{eq:v_opt_vol_p0}, into the bilinear form,~\eqref{eq:bilinear_adv}, after multiplication by
 the solution coefficients
+\begin{sagesilent}
+val = [(-dtest_vol_phi0U).rational_simplify(),
+       (test_vol_phi0.subs({r:-1})/phi_u0).rational_simplify(),
+	 (test_vol_phi0.subs({r:1})/phi_u0).rational_simplify()
+	]
+term = [''.join([r"\int_{-1}^{1}"+ str(latex(val[0])) + "u_{i,0}u_i dr"]),
+        ''.join([r"-"+ str(latex(val[1])) + "u_{i,0}f_{i-1}"]),
+        ''.join([r"+"+ str(latex(val[2])) + "u_{i,0}f_{i}"])
+       ]
+\end{sagesilent}
+
 \begin{align}
-b(v_{u_{0}},\varg{u}) 
-& = \sum_{i=1}^n
-\int_{-1}^{1} \sage{(-dVPhi0U).rational_simplify()} u_{i,0}u_i dr
-- \left( \sage{(VPhi0.subs({r:-1})/BasisU0).rational_simplify()} \right) u_{i,0}f_{i-1}
-+ \left( \sage{(VPhi0.subs({r:1})/BasisU0).rational_simplify()} \right) u_{i,0}f_i
+b(v_{u_{0}},\varg{u}) = \sum_{i=1}^n
+\sagestr{print_nz(val[0],term[0])}
+\sagestr{print_nz(val[1],term[1])}
+\sagestr{print_nz(val[2],term[2])}
 \end{align}
 
 where $u_{i,0} = \frac{1}{h} \int_{x_{i-1}}^{x_i} u dx = \frac{1}{2} \int_{-1}^{1} u dr$ denotes the average of
@@ -262,12 +305,18 @@ b(v_{u_{j>0}},\varg{u})
 \end{align}
 
 Summing the two contributions
+\begin{sagesilent}
+val[0] = (-dtest_vol_phi0U-h/2).rational_simplify()
+term[0] = ''.join([r"+\int_{-1}^{1}"+ str(latex(val[0])) + "u_{i,0}u_i dr"])
+\end{sagesilent}
+
+
 \begin{align}
-b(v_{u},\varg{u}) 
-& = \sum_{i=1}^n
+b(v_{u},\varg{u}) & = \sum_{i=1}^n
 \int_{-1}^{1} \frac{h}{2} u_i^2 dr
-- \left( \sage{(VPhi0.subs({r:-1})/BasisU0).rational_simplify()} \right) u_{i,0}f_{i-1}
-+ \left( \sage{(VPhi0.subs({r:1})/BasisU0).rational_simplify()} \right) u_{i,0}f_i.
+\sagestr{print_nz(val[0],term[0])}
+\sagestr{print_nz(val[1],term[1])}
+\sagestr{print_nz(val[2],term[2])}.
 \end{align}
 \makered{Needs extra volume term for cases where it is not zero.}\\~
 
@@ -292,6 +341,7 @@ b(v_{f},\varg{u})
 \end{align}
 
 % Use .factor() to combine expanded terms.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

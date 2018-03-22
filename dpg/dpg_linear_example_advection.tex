@@ -108,51 +108,84 @@ by omitting the conformity constraint and limiting the support of each of the op
 such that they can be computed in a local manner.
 
 \begin{proposition} \label{prop:test_norm_for_characteristic_test}
-Defining the ``-'' volume in relation to a specific face as that which satisfies $\vect{\hat{n}} \cdot \vect{b} \ge 0$,
-then given the localized test norm (inner product)
+Given the localizable test norm (inner product)
 \begin{align}
+(w,v)_{\fspace{V}} 
+=
+\sum_{\fe{V}}
 (w,v)_{\fspace{V}(\fe{V})}
 = 
+\sum_{\fe{V}}
 \int_{\fe{V}} (\nabla w \cdot \vect{b})(\vect{b} \cdot \nabla v) d\fe{V}
 +
-\int_{\fe{F}} \jump{w} |\vect{\hat{n}} \cdot \vect{b}| \jump{v} d\fe{F}
+\frac{1}{2} \int_{\fe{F}} \jump{w} \jump{v} d\fe{F}
+\end{align}
+
+and choosing trial functions from the piecewise polynomial space of maximal degree $p$, $\mathcal{P}^p$,
+\begin{align}
+\fspace{U}_h = \{ u : u \in \fspace{L}^2(\fe{V}), u|_{\fe{V}} \in \mathcal{P}^p \},
+\end{align}
+
+then the test functions can be computed exactly when choosing the following test space
+\begin{align}
+\fspace{V} = \fspace{V}_h = \{ v : v \in \fspace{L}^2(\fe{V}), v|_{\fe{V}} \in \mathcal{P}^{p+1} \}.
+\end{align}
+
+and further, the energy norm for the solution is given by
+\begin{align}
+(\varg{w},\varg{u})_{\fspace{U}} 
+=
+\sum_{\fe{V}}
+(w,u)_{\fspace{V}(\fe{V})}
+= 
+\sum_{\fe{V}}
+\int_{\fe{V}} u^2 d\fe{V}
 +
-\int_{\fe{F} \cap \fe{V}_{\fe{F}}^+} w |\vect{\hat{n}} \cdot \vect{b}| v d\fe{F}
-\end{align}
-\makered{Note that the above is not a norm when $\vect{\hat{n}} \cdot \vect{b} = 0$. This is not a problem for the
-method as the trace solution component is not required on such faces, but is a problem for the rigour. Change the norm
-on such faces? Add an L2 component?}
-
-where integration is performed over all volumes and faces in the support of the local test function, then the computed test functions for the trace unknowns satisfy
-\begin{align}
-||v_{\hat{\phi}}-v_{\hat{\phi}_h}||_{{L^2(\Omega_h)}}
-\le
-\inf_{w_{\hat{\phi}_h} \in L^2(\fe{V}_{\fe{F}}^- \cup \fe{V}_{\fe{F}}^+)}
-||v_{\hat{\phi}}-w_{\hat{\phi}_h}||_{{L^2(\Omega_h)}},
+\frac{1}{2} \int_{\fe{F}} (f^*)^2 d\fe{F}
 \end{align}
 
-where the exact test functions satisfy~\eqref{eq:optimal_test_adv_trace_0} and~\eqref{eq:optimal_test_adv_trace_1}.
-Further, the computed trace unknowns obtained by solving~\eqref{eq:bilinear_abstract_infinite} after substituting
-$v_{\hat{\phi}}$ into~\eqref{eq:variational_form_advection} satisfy
+such that by~\eqref{eq:abstract_dpg_error} and~\eqref{eq:bui_thanh_2-6} 
+
 \begin{align}
-||u^*-\hat{u}_h||_{{L^2(\Gamma^+_h)}}
+||\varg{u}-\varg{u}_h||_{L^2(\Omega)}
+=
+||\varg{u}-\varg{u}_h||_{\fspace{U}}
 \le
-\inf_{\hat{w}_h \in {L^2(\Gamma^+_h)}}
-||u^*-\hat{w}_h||_{{L^2(\Gamma^+_h)}}.
+\inf_{\varg{w}_h \in \fspace{U}_h} ||\varg{u}-\varg{w}_h||_{\fspace{U}}.
 \end{align}
+
+The computed solution is thus the $L^2$-projection of the exact solution.
 
 \end{proposition}
 
 \begin{proof}
-Solving for the approximate optimal test functions using~\eqref{eq:auxiliary_opt_v_finite} with $\varg{u}_h =
-(0,\hat{\phi})$,
-\begin{align}
-1
-\end{align}
+\makered{Working on it! See the Sage\TeX{} document.}
+
 
 \end{proof}
 
 \begin{remark}
+Choosing a norm other than that selected in~\autoref{prop:test_norm_for_characteristic_test} results in a different
+induced norm on the solution but which may still result in the solution corresponding to the $L^2$-projection of the
+exact solution. This is the case for the norm chosen by Demkowicz et al.~\cite[Section \makeblue{3C}]{Demkowicz2011} for
+example.
+\\~
+
+\makered{I am still currently confused about why this is. It seems that his norm is such that the test
+functions are still exactly represented in $\mathcal{P}^{p+1}$ so that the continuity and inf-sup constants are still
+equal and that, because it can be shown that the fluxes are exact, the different $\fspace{U}$ norm is still equivalent
+to the $L^2$ norm with equivalence constants of 1 (as in~\autoref{prop:test_norm_for_characteristic_test}). There is
+potentially something odd about the argument requiring $alpha = O(\varepsilon)$~\cite[Appendix \makeblue{A}, proof of
+item 5]{Demkowicz2011} to prove it as the norm~\cite[Section \makeblue{3B}]{Demkowicz2011} requires $alpha > 0$, but I am
+not sure. I will keep thinking about it and likely code this up to demonstrate it to myself.}
+\end{remark}
+
+\begin{remark}
+In 1D, this results in the computed fluxes, $f^*_h$, being exact.
+\end{remark}
+
+\begin{remark}
+\makered{Think on whether the intuition below is still valid when finished with the proof.}\\~
 The physical intuition behind the choice of test inner product in~\autoref{prop:test_norm_for_characteristic_test} is
 that the resultant test functions serve to propagate solutions taking the form $\hat{\phi}$ from inflow to outflow
 volume faces along the flow characteristics (in the advection direction) while simultaneously adding the $L^2$
@@ -166,10 +199,9 @@ figure).}
 \item Bui-Thanh2013's continuous method results in the recovery of the solution as the propagation of the boundary along
 the characteristics.
 \item Using the localized test norm: H1-semi + trace term, the trace test functions computed are exactly those
-satisfying the constraints above. Inserting these into the bilinear form results in pointwise exact solution for the
-trace unknowns (1D).
+satisfying the constraints above.
 \item Equivalent with DG using lowest order test?
 \end{itemize}
-\makered{Ask Legrand if he is interested in this result once finished typesetting (and likely after 2D attempt is made).}
+\makered{Ask Legrand if he is interested in this result once finished typesetting (and likely after 2D is finalized).}
 
 
