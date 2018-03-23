@@ -16,6 +16,7 @@ if [[ $# -eq 2 ]]; then
     clear && clear
     pdflatex $2.tex
     bibtex   $2
+#    rm       $2.sagetex.sout
     sage     $2.sagetex.sage
     pdflatex $2.tex
     pdflatex $2.tex

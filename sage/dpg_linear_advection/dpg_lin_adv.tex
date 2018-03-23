@@ -56,15 +56,14 @@
 
 \begin{sagesilent}
 var('a,b,c')
-assume(a>=0)
-assume(b>=0)
-assume(c>=0)
 
 hv = 1/2^2
 
-#b = 0; c = 0; av = 2; bv = 0; cv = 0;
-a = 0; c = 0; av = 0; bv = 2; cv = 0;
-#c = a; av = 2; bv = 3; cv = av;
+#assume(a>0); b = 0; c = 0; av = 2; bv = 0; cv = 0;
+#assume(c>0); a = 0; b = 0; av = 0; bv = 0; cv = 2;
+assume(a>0,c>0); b = 0; c = a; av = 2; bv = 0; cv = 2;
+#a = 0; assume(b>0); c = 0; av = 0; bv = 2; cv = 0;
+#assume(a>0,b>0,c>0); c = a; av = 2; bv = 3; cv = av;
 \end{sagesilent}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -74,6 +73,8 @@ a = 0; c = 0; av = 0; bv = 2; cv = 0;
 \begin{sagesilent}
 rand_const = 31415926535 # Used as placeholder for terms which should not be used.
 var('h')
+assume(h>0)
+
 var('r')
 var('i,j,k,l')
 
@@ -196,10 +197,10 @@ p = plot(test_vol_phi0(h=hv,a=av,b=bv,c=cv),r,-1,1)
 \end{sagesilent}
 
 \begin{figure}[!ht]
-	\centering%
-	\sageplot[width=.5\textwidth]{p}
-	\caption{Visualization of $p_0$ Test Function}
-	\label{fig:test_vol_p0}
+      \centering%
+      \sageplot[width=.5\textwidth]{p}
+      \caption{Visualization of $p_0$ Test Function}
+      \label{fig:test_vol_p0}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -254,10 +255,10 @@ p = pl+pr
 \end{sagesilent}
 
 \begin{figure}[!ht]
-	\centering%
-	\sageplot[width=.5\textwidth]{p}
-	\caption{Visualization of Flux Test Function (Note: Has Support over Two Volumes)}
-	\label{fig:test_flux}
+      \centering%
+      \sageplot[width=.5\textwidth]{p}
+      \caption{Visualization of Flux Test Function (Note: Has Support over Two Volumes)}
+      \label{fig:test_flux}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -268,11 +269,15 @@ dtest_vol_phi0 = diff(test_vol_phi0,r)
 phi_u0 = sqrt(1/2)
 dtest_vol_phi0U = (dtest_vol_phi0/phi_u0).rational_simplify()
 
-def print_nz(val,latex_string):
-  # Output the latex string if the input value is not zero.
-  if (val == 0):
-    return ''
-  return latex_string
+def return_nz(val,latex_string,include_plus):
+      # Return the latex string if the input value is not zero, optionally including a '+' sign for positive terms.
+      if (val == 0):
+            return ''
+      elif (val.is_positive() and include_plus):
+            return '+'+latex_string
+      else:
+            return latex_string
+
 \end{sagesilent}
 
 The implied energy norm is obtained by substituting the optimal test functions into the bilinear form as discussed by 
@@ -281,34 +286,36 @@ optimal test function,~\eqref{eq:v_opt_vol_p0}, into the bilinear form,~\eqref{e
 the solution coefficients
 \begin{sagesilent}
 val = [(-dtest_vol_phi0U).rational_simplify(),
-       (test_vol_phi0.subs({r:-1})/phi_u0).rational_simplify(),
-       (-test_vol_phi0.subs({r:1})/phi_u0).rational_simplify()
+       -(test_vol_phi0.subs({r:-1})/phi_u0).rational_simplify(),
+       (test_vol_phi0.subs({r:1})/phi_u0).rational_simplify()
       ]
-term = [''.join([r"\int_{-1}^{1}"+ str(latex(val[0])) + "u_{i,0}u_i dr"]),
-        ''.join([r"-"+ str(latex(val[1])) + "u_{i,0}f_{i-1}"]),
-        ''.join([r"-"+ str(latex(val[2])) + "u_{i,0}f_{i}"])
+term = [''.join([str(latex(val[0])) + "u_{i,0}u_i"]),
+        ''.join([str(latex(val[1])) + "u_{i,0}f_{i-1}"]),
+        ''.join([str(latex(val[2])) + "u_{i,0}f_{i}"])
        ]
 val_int = [val[0],
            (val[1]/2).rational_simplify(),
            (val[2]/2).rational_simplify()
           ]
-term_int = [''.join([r""+ str(latex(val_int[0])) + "u_{i,0}u_i"]),
-            ''.join([r"-"+ str(latex(val_int[1])) + "u_{i}f_{i-1}"]),
-            ''.join([r"-"+ str(latex(val_int[2])) + "u_{i}f_{i}"])
+term_int = [''.join([str(latex(val_int[0])) + "u_{i,0}u_i"]),
+            ''.join([str(latex(val_int[1])) + "u_{i}f_{i-1}"]),
+            ''.join([str(latex(val_int[2])) + "u_{i}f_{i}"])
            ]
 \end{sagesilent}
 
 \begin{align}
 b(v_{u_{0}},\varg{u}) 
 = & \sum_{i=1}^n
-\sagestr{print_nz(val[0],term[0])}
-\sagestr{print_nz(val[1],term[1])}
-\sagestr{print_nz(val[2],term[2])} \\
+\int_{-1}^{1} \left(
+\sagestr{return_nz(val[0],term[0],0)}
+\right) dr
+\sagestr{return_nz(val[1],term[1],1)}
+\sagestr{return_nz(val[2],term[2],1)} \\
 = & \sum_{i=1}^n
 \int_{-1}^{1} \left(
-\sagestr{print_nz(val_int[0],term_int[0])}
-\sagestr{print_nz(val_int[1],term_int[1])}
-\sagestr{print_nz(val_int[2],term_int[2])}
+\sagestr{return_nz(val_int[0],term_int[0],0)}
+\sagestr{return_nz(val_int[1],term_int[1],1)}
+\sagestr{return_nz(val_int[2],term_int[2],1)}
 \right)
 dr
 \end{align}
@@ -325,109 +332,137 @@ b(v_{u_{j>0}},\varg{u})
 Summing the two contributions
 \begin{sagesilent}
 val_int[0] = (-dtest_vol_phi0U-h/2).rational_simplify()
-term_int[0] = ''.join([r"+"+ str(latex(val[0])) + "u_{i,0}u_i"])
+term_int[0] = ''.join([str(latex(val_int[0])) + "u_{i,0}u_i"])
 \end{sagesilent}
 
 \begin{align}
 b(v_{u},\varg{u})
 = & \sum_{i=1}^n
-\int_{-1}^{1}
-\left(
+\int_{-1}^{1} \left(
 \frac{h}{2} u_i^2
-\sagestr{print_nz(val_int[0],term_int[0])}
-\sagestr{print_nz(val_int[1],term_int[1])}
-\sagestr{print_nz(val_int[2],term_int[2])}
-\right)
-dr
+\sagestr{return_nz(val_int[0],term_int[0],1)}
+\sagestr{return_nz(val_int[1],term_int[1],1)}
+\sagestr{return_nz(val_int[2],term_int[2],1)}
+\right) dr
 \end{align}
 
 Considering the optimal test functions for the fluxes,
 \begin{sagesilent}
-# Note additional +/- signs included below to avoid double negation/addition in display.
 val_r = [(-diff(VPhiHatR,r)).rational_simplify(),
          (-VPhiHatR.subs({r:-1})).rational_simplify(),
-         (-VPhiHatR.subs({r:1})).rational_simplify()
+         (VPhiHatR.subs({r:1})).rational_simplify()
         ]
-term_r = [''.join([r"\int_{-1}^{1}"+ str(latex(val_r[0])) + "f_{i-1}u_i dr"]),
-          ''.join([r"+"+ str(latex(val_r[1])) + "f_{i-1}^2"]),
-          ''.join([r"-"+ str(latex(val_r[2])) + "f_{i-1}f_{i}"])
+term_r = [''.join([str(latex(val_r[0])) + "f_{i-1}u_i"]),
+          ''.join([str(latex(val_r[1])) + "f_{i-1}^2"]),
+          ''.join([str(latex(val_r[2])) + "f_{i-1}f_{i}"])
          ]
 
 val_l = [(-diff(VPhiHatL,r)).rational_simplify(),
-         (VPhiHatL.subs({r:-1})).rational_simplify(),
+         (-VPhiHatL.subs({r:-1})).rational_simplify(),
          (VPhiHatL.subs({r:1})).rational_simplify()
         ]
-term_l = [''.join([r"\int_{-1}^{1}"+ str(latex(val_l[0])) + "f_{i}u_i dr"]),
-          ''.join([r"-"+ str(latex(val_l[1])) + "f_{i}f_{i-1}"]),
-          ''.join([r"+"+ str(latex(val_l[2])) + "f_{i}^2"])
+term_l = [''.join([str(latex(val_l[0])) + "f_{i}u_i"]),
+          ''.join([str(latex(val_l[1])) + "f_{i}f_{i-1}"]),
+          ''.join([str(latex(val_l[2])) + "f_{i}^2"])
          ]
+text_int = [r"\int_{-1}^{1} \bigg(",
+            r"\bigg) dr"
+           ]
 \end{sagesilent}
 
 \begin{alignat}{3}
 b(v_{f},\varg{u}) 
 = \sum_{i=1}^n
-&  \sagestr{print_nz(val_r[0],term_r[0])}
-&& \sagestr{print_nz(val_r[1],term_r[1])}
-&& \sagestr{print_nz(val_r[2],term_r[2])} \\
-&  \sagestr{print_nz(val_l[0],term_l[0])}
-&& \sagestr{print_nz(val_l[1],term_l[1])}
-&& \sagestr{print_nz(val_l[2],term_l[2])}.
+& \sagestr{return_nz(h,text_int[0],0)}
+  \sagestr{return_nz(h,term_r[0],0)}
+  \sagestr{return_nz(h,text_int[1],0)}
+&& \sagestr{return_nz(val_r[1],term_r[1],1)}
+&& \sagestr{return_nz(val_r[2],term_r[2],1)} \\
++ & \sagestr{return_nz(h,text_int[0],0)}
+  \sagestr{return_nz(h,term_l[0],0)}
+  \sagestr{return_nz(h,text_int[1],0)}
+&& \sagestr{return_nz(val_l[1],term_l[1],1)}
+&& \sagestr{return_nz(val_l[2],term_l[2],1)}.
 \end{alignat}
 
-Separating terms with $h$ factors and grouping integral terms
+Isolating terms with $h$ factors and grouping integral terms
 \begin{sagesilent}
 val_rh = (val_r[1]).rational_expand().coefficient(h)*h
 val_r1 = (val_r[1]-val_rh).rational_simplify()
 val_lh = (val_l[2]).rational_expand().coefficient(h)*h
 val_l1 = (val_l[2]-val_lh).rational_simplify()
-val_rl1 = (-(val_r[2]+val_l[1])).rational_simplify()
+val_rl1 = (val_r[2]+val_l[1]).rational_simplify()
 
-term_r[0] = ''.join([r""+ str(latex(val_r[0])) + "f_{i-1}u_i"])
-term_l[0] = ''.join([r""+ str(latex(val_l[0])) + "f_{i}u_i"])
-term_rh  = ''.join([r"+"+ str(latex((1/2*val_rh).rational_simplify())) + "f_{i-1}^2"])
-term_lh  = ''.join([r"+"+ str(latex((1/2*val_lh).rational_simplify())) + "f_{i}^2"])
+term_r[0] = ''.join([str(latex(val_r[0])) + "f_{i-1}u_i"])
+term_l[0] = ''.join([str(latex(val_l[0])) + "f_{i}u_i"])
+term_rh  = ''.join([str(latex((1/2*val_rh).rational_simplify())) + "f_{i-1}^2"])
+term_lh  = ''.join([str(latex((1/2*val_lh).rational_simplify())) + "f_{i}^2"])
 
-term_r[1] = ''.join([r"+"+ str(latex(val_r1)) + "f_{i-1}^2"])
-term_l[2] = ''.join([r"+"+ str(latex(val_l1)) + "f_{i}^2"])
-term_rl1 = ''.join([r""+ str(latex(val_rl1)) + "f_{i-1}f_{i}"])
+term_r[1] = ''.join([str(latex(val_r1)) + "f_{i-1}^2"])
+term_l[2] = ''.join([str(latex(val_l1)) + "f_{i}^2"])
+term_rl1  = ''.join([str(latex(val_rl1)) + "f_{i-1}f_{i}"])
 
 var('x,y')
 tmp = val_r1*x^2+val_rl1*x*y+val_l1*y^2
 mult_f = (tmp.factor().coefficient((x-y)^2)).rational_simplify()
-
 \end{sagesilent}
 
 \begin{alignat}{3}
 b(v_{f},\varg{u}) 
 = \sum_{i=1}^n
-& \int_{-1}^{1} \left(
-\sagestr{print_nz(val_r[0],term_r[0])}
-\sagestr{print_nz(val_l[0],term_l[0])}
-\sagestr{print_nz(val_rh,term_rh)}
-\sagestr{print_nz(val_lh,term_lh)}
-\right) dr \\
++ &
+\sagestr{return_nz(h,text_int[0],0)}
+\sagestr{return_nz(h,term_r[0],0)}
+\sagestr{return_nz(h,term_rh,1)}
+\sagestr{return_nz(h,text_int[1],0)} \\
++ &
+\sagestr{return_nz(h,text_int[0],0)}
+\sagestr{return_nz(h,term_l[0],0)}
+\sagestr{return_nz(h,term_lh,1)}
+\sagestr{return_nz(h,text_int[1],0)} \\
 & 
-\sagestr{print_nz(val_r1,term_r[1])}
-\sagestr{print_nz(val_rl1,term_rl1)}
-\sagestr{print_nz(val_l1,term_l[2])}.
+\sagestr{return_nz(val_r1,term_r[1],1)}
+\sagestr{return_nz(val_rl1,term_rl1,1)}
+\sagestr{return_nz(val_l1,term_l[2],1)}.
 \end{alignat}
 
 Finally, summing the two test function contributions
+\begin{sagesilent}
+def define_combined_uf():
+      if (not a.is_zero() and b.is_zero() and c.is_zero()):
+            c_u2 = h/2
+            c_uf = val_int[1]+val_r[0]
+            c_f2 = 1/2*val_rh # 1/2 from inclusion in the reference integral
+
+            tmp = c_u2*x^2+c_uf*x*y+c_f2*y^2
+            mult_uf = (tmp.factor().coefficient((x-y)^2)).rational_simplify()
+            term_uf = "u_{i}^2 - f_{i-1}^2"
+
+            return {'mult':mult_uf, 'term':term_uf, }
+      elif (not c.is_zero() and b.is_zero() and a.is_zero()):
+            c_u2 = h/2
+            c_uf = val_int[2]+val_l[0]
+            c_f2 = 1/2*val_lh # 1/2 from inclusion in the reference integral
+
+            tmp = c_u2*x^2+c_uf*x*y+c_f2*y^2
+            mult_uf = (tmp.factor().coefficient((x-y)^2)).rational_simplify()
+            term_uf = r"\left( u_{i}^2 - f_{i}^2 \right)"
+
+            return {'mult':mult_uf, 'term':term_uf, }
+      else:
+            return {'mult':0, 'term':"\makered{TODO}", }
+
+uf = define_combined_uf()
+\end{sagesilent}
+
 \begin{alignat}{3}
 b(v_{\varg{u}},\varg{u})
 = \sum_{i=1}^n
 &
-%\int_{-1}^{1}
-%\left(
-%\frac{h}{2} u_i^2
-%\sagestr{print_nz(val_int[0],term_int[0])}
-%\sagestr{print_nz(val_int[1],term_int[1])}
-%\sagestr{print_nz(val_int[2],term_int[2])}
-%\right)
-\\
+\int_{-1}^{1}
+\sage{uf['mult']} \sagestr{uf['term']} \\
 + & \sage{mult_f} \left( f_{i-1}^2 - f_{i}^2 \right).
 \end{alignat}
-\makered{missing the volume term.}
 
 
 
