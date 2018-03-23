@@ -62,7 +62,8 @@ assume(c>=0)
 
 hv = 1/2^2
 
-b = 0; c = 0; av = 2; bv = 0; cv = 0;
+#b = 0; c = 0; av = 2; bv = 0; cv = 0;
+a = 0; c = 0; av = 0; bv = 2; cv = 0;
 #c = a; av = 2; bv = 3; cv = av;
 \end{sagesilent}
 
@@ -71,6 +72,7 @@ b = 0; c = 0; av = 2; bv = 0; cv = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{sagesilent}
+rand_const = 31415926535 # Used as placeholder for terms which should not be used.
 var('h')
 var('r')
 var('i,j,k,l')
@@ -280,22 +282,38 @@ the solution coefficients
 \begin{sagesilent}
 val = [(-dtest_vol_phi0U).rational_simplify(),
        (test_vol_phi0.subs({r:-1})/phi_u0).rational_simplify(),
-	 (test_vol_phi0.subs({r:1})/phi_u0).rational_simplify()
-	]
+       (-test_vol_phi0.subs({r:1})/phi_u0).rational_simplify()
+      ]
 term = [''.join([r"\int_{-1}^{1}"+ str(latex(val[0])) + "u_{i,0}u_i dr"]),
         ''.join([r"-"+ str(latex(val[1])) + "u_{i,0}f_{i-1}"]),
-        ''.join([r"+"+ str(latex(val[2])) + "u_{i,0}f_{i}"])
+        ''.join([r"-"+ str(latex(val[2])) + "u_{i,0}f_{i}"])
        ]
+val_int = [val[0],
+           (val[1]/2).rational_simplify(),
+           (val[2]/2).rational_simplify()
+          ]
+term_int = [''.join([r""+ str(latex(val_int[0])) + "u_{i,0}u_i"]),
+            ''.join([r"-"+ str(latex(val_int[1])) + "u_{i}f_{i-1}"]),
+            ''.join([r"-"+ str(latex(val_int[2])) + "u_{i}f_{i}"])
+           ]
 \end{sagesilent}
 
 \begin{align}
-b(v_{u_{0}},\varg{u}) = \sum_{i=1}^n
+b(v_{u_{0}},\varg{u}) 
+= & \sum_{i=1}^n
 \sagestr{print_nz(val[0],term[0])}
 \sagestr{print_nz(val[1],term[1])}
-\sagestr{print_nz(val[2],term[2])}
+\sagestr{print_nz(val[2],term[2])} \\
+= & \sum_{i=1}^n
+\int_{-1}^{1} \left(
+\sagestr{print_nz(val_int[0],term_int[0])}
+\sagestr{print_nz(val_int[1],term_int[1])}
+\sagestr{print_nz(val_int[2],term_int[2])}
+\right)
+dr
 \end{align}
 
-where $u_{i,0} = \frac{1}{h} \int_{x_{i-1}}^{x_i} u dx = \frac{1}{2} \int_{-1}^{1} u dr$ denotes the average of
+where $u_{i,0} = \frac{1}{h} \int_{x_{i-1}}^{x_i} u_i dx = \frac{1}{2} \int_{-1}^{1} u_i dr$ denotes the average of
 $u_i$ in volume $i$. Noting the property discussed above of all other integrated Legendre polynomials taking values of
 zero at $r = \pm 1$, we have
 \begin{align}
@@ -306,41 +324,111 @@ b(v_{u_{j>0}},\varg{u})
 
 Summing the two contributions
 \begin{sagesilent}
-val[0] = (-dtest_vol_phi0U-h/2).rational_simplify()
-term[0] = ''.join([r"+\int_{-1}^{1}"+ str(latex(val[0])) + "u_{i,0}u_i dr"])
+val_int[0] = (-dtest_vol_phi0U-h/2).rational_simplify()
+term_int[0] = ''.join([r"+"+ str(latex(val[0])) + "u_{i,0}u_i"])
 \end{sagesilent}
 
-
 \begin{align}
-b(v_{u},\varg{u}) & = \sum_{i=1}^n
-\int_{-1}^{1} \frac{h}{2} u_i^2 dr
-\sagestr{print_nz(val[0],term[0])}
-\sagestr{print_nz(val[1],term[1])}
-\sagestr{print_nz(val[2],term[2])}.
+b(v_{u},\varg{u})
+= & \sum_{i=1}^n
+\int_{-1}^{1}
+\left(
+\frac{h}{2} u_i^2
+\sagestr{print_nz(val_int[0],term_int[0])}
+\sagestr{print_nz(val_int[1],term_int[1])}
+\sagestr{print_nz(val_int[2],term_int[2])}
+\right)
+dr
 \end{align}
-\makered{Needs extra volume term for cases where it is not zero.}\\~
 
 Considering the optimal test functions for the fluxes,
 \begin{sagesilent}
-var('fl,fr')
-MultFlr1 = (VPhiHatL.subs({r:-1})).rational_simplify()
-MultFrr  = (VPhiHatL.subs({r:1})).rational_simplify()
-MultFll  = (VPhiHatR.subs({r:-1})).rational_simplify()
-MultFlr2 = (VPhiHatR.subs({r:1})).rational_simplify()
+# Note additional +/- signs included below to avoid double negation/addition in display.
+val_r = [(-diff(VPhiHatR,r)).rational_simplify(),
+         (-VPhiHatR.subs({r:-1})).rational_simplify(),
+         (-VPhiHatR.subs({r:1})).rational_simplify()
+        ]
+term_r = [''.join([r"\int_{-1}^{1}"+ str(latex(val_r[0])) + "f_{i-1}u_i dr"]),
+          ''.join([r"+"+ str(latex(val_r[1])) + "f_{i-1}^2"]),
+          ''.join([r"-"+ str(latex(val_r[2])) + "f_{i-1}f_{i}"])
+         ]
+
+val_l = [(-diff(VPhiHatL,r)).rational_simplify(),
+         (VPhiHatL.subs({r:-1})).rational_simplify(),
+         (VPhiHatL.subs({r:1})).rational_simplify()
+        ]
+term_l = [''.join([r"\int_{-1}^{1}"+ str(latex(val_l[0])) + "f_{i}u_i dr"]),
+          ''.join([r"-"+ str(latex(val_l[1])) + "f_{i}f_{i-1}"]),
+          ''.join([r"+"+ str(latex(val_l[2])) + "f_{i}^2"])
+         ]
 \end{sagesilent}
 
-\begin{align}
+\begin{alignat}{3}
 b(v_{f},\varg{u}) 
 = \sum_{i=1}^n
-& \int_{-1}^{1} \left( \sage{(-diff(VPhiHatL,r)).rational_simplify()} \right) f_{i}u_{i} dr
-- \left( \sage{MultFlr1} \right) f_{i} f_{i-1}
-+ \left( \sage{MultFrr}  \right) f_{i}^2 \\
-+ & \int_{-1}^{1} \left( \sage{(-diff(VPhiHatR,r)).rational_simplify()} \right) f_{i-1}u_{i} dr
-- \left( \sage{MultFll} \right) f_{i-1}^2
-+ \left( \sage{MultFlr2}  \right) f_{i-1}f_{i}
-\end{align}
+&  \sagestr{print_nz(val_r[0],term_r[0])}
+&& \sagestr{print_nz(val_r[1],term_r[1])}
+&& \sagestr{print_nz(val_r[2],term_r[2])} \\
+&  \sagestr{print_nz(val_l[0],term_l[0])}
+&& \sagestr{print_nz(val_l[1],term_l[1])}
+&& \sagestr{print_nz(val_l[2],term_l[2])}.
+\end{alignat}
 
-% Use .factor() to combine expanded terms.
+Separating terms with $h$ factors and grouping integral terms
+\begin{sagesilent}
+val_rh = (val_r[1]).rational_expand().coefficient(h)*h
+val_r1 = (val_r[1]-val_rh).rational_simplify()
+val_lh = (val_l[2]).rational_expand().coefficient(h)*h
+val_l1 = (val_l[2]-val_lh).rational_simplify()
+val_rl1 = (-(val_r[2]+val_l[1])).rational_simplify()
+
+term_r[0] = ''.join([r""+ str(latex(val_r[0])) + "f_{i-1}u_i"])
+term_l[0] = ''.join([r""+ str(latex(val_l[0])) + "f_{i}u_i"])
+term_rh  = ''.join([r"+"+ str(latex((1/2*val_rh).rational_simplify())) + "f_{i-1}^2"])
+term_lh  = ''.join([r"+"+ str(latex((1/2*val_lh).rational_simplify())) + "f_{i}^2"])
+
+term_r[1] = ''.join([r"+"+ str(latex(val_r1)) + "f_{i-1}^2"])
+term_l[2] = ''.join([r"+"+ str(latex(val_l1)) + "f_{i}^2"])
+term_rl1 = ''.join([r""+ str(latex(val_rl1)) + "f_{i-1}f_{i}"])
+
+var('x,y')
+tmp = val_r1*x^2+val_rl1*x*y+val_l1*y^2
+mult_f = (tmp.factor().coefficient((x-y)^2)).rational_simplify()
+
+\end{sagesilent}
+
+\begin{alignat}{3}
+b(v_{f},\varg{u}) 
+= \sum_{i=1}^n
+& \int_{-1}^{1} \left(
+\sagestr{print_nz(val_r[0],term_r[0])}
+\sagestr{print_nz(val_l[0],term_l[0])}
+\sagestr{print_nz(val_rh,term_rh)}
+\sagestr{print_nz(val_lh,term_lh)}
+\right) dr \\
+& 
+\sagestr{print_nz(val_r1,term_r[1])}
+\sagestr{print_nz(val_rl1,term_rl1)}
+\sagestr{print_nz(val_l1,term_l[2])}.
+\end{alignat}
+
+Finally, summing the two test function contributions
+\begin{alignat}{3}
+b(v_{\varg{u}},\varg{u})
+= \sum_{i=1}^n
+&
+%\int_{-1}^{1}
+%\left(
+%\frac{h}{2} u_i^2
+%\sagestr{print_nz(val_int[0],term_int[0])}
+%\sagestr{print_nz(val_int[1],term_int[1])}
+%\sagestr{print_nz(val_int[2],term_int[2])}
+%\right)
+\\
++ & \sage{mult_f} \left( f_{i-1}^2 - f_{i}^2 \right).
+\end{alignat}
+\makered{missing the volume term.}
+
 
 
 
