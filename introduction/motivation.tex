@@ -1,0 +1,64 @@
+\section{Motivation}
+\label{sec:intro_motivation}
+
+The use of computational fluid dynamics (CFD) tools for the numerical analysis
+of fluid flows has significantly reduced costs associated with aerodynamic
+design over the past several decades.
+As computing systems have become
+increasingly powerful, there has been a corresponding advance in the equations
+employed for flow simulation (initially beginning with potential equations and
+now generally using the compressible Navier-Stokes equations) as well as in the resolution of
+complex flow phenomena.
+Finite volume methods currently represent the industry
+and, to a great extent, academic standard for the solution of partial
+differential equations (PDEs) in the aerospace community.
+This is in large part
+due to their robustness in the presence of steep gradients in the flow as well
+as their ability to model geometrically complex objects as a result of the
+possibly unstructured nature of the volumes.
+However, finite volume schemes are
+inherently second order accurate, making their usage inefficient when flow
+solutions have high regularity.
+
+As a result of significant interest from the research community, high-order
+methods are thus now being pursued with the goal of achieving solution
+convergence at higher than second order rates and of employing fewer degrees of
+freedom (DOF) to represent solutions with comparable error magnitudes.
+In the case of the solution having unlimited regularity, the ideal high-order
+strategy is to employ spectral methods for their representation due to the
+exponential convergence properties and extremely efficient solution algorithms.
+However, these methods are unsuitable when the domain under consideration has
+complex geometrical features or when the regularity of the solution varies
+throughout the domain.
+The natural path of development has thus been towards the use of
+pseudo-spectral methods, which can be thought of in terms of employing a local
+spectral method within each volume contributing to the tessellation of the
+considered domain.
+The most popular and convenient approach for high-order
+solution representation is through the use piecewise polynomial basis functions
+having limited support.
+Within this framework, it is expected that the
+combination of mesh refinement level adaptation ($h$-adaptation) and polynomial
+degree adaptation ($p$-adaptation) can be used to obtain a very efficient
+representation of the solution, and reduce the computational cost of obtaining
+the solution as compared to low order methods.
+
+Of course, it must be noted that significant challenges remain in the setting of
+high-order methods.
+As the advantage of high-order methods is necessarily linked to their
+high-order convergence rates, of primary importance is that methods be
+designed such that expected convergence rates from the polynomial approximation
+theory be achievable; this rate of convergence is termed the optimal rate.
+Further, all relevant aspects of the discretization must be
+considered such that the optimal rates are observed in practice.
+Another pressing challenge stems from the fact that high-order methods have less
+numerical diffusion as compared to low-order methods, leading in many cases to
+the requirement for the addition of additional stabilization to that
+provided by the scheme.
+This stabilization is commonly introduced either through
+the use of a limiter or by adding an artificial dissipation term to
+discretization.
+Both methods result in a modification of the computed solution
+as compared to that which is associated with the PDE and the investigation of
+methods naturally introducing the physically correct stabilization are
+consequently of great importance as well.

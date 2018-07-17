@@ -21,18 +21,22 @@ b(v,\varg{u})
 \int_{\fe{F} \setminus \Gamma^{\text{i}}} v f^*\ d\fe{F}, \label{eq:bilinear_pg_advection} \\
 l(v)
 =\ & \sum_{\fe{V}} \int_{\fe{V}} v s\ d\fe{V} + \int_{\fe{F} \cap \Gamma^{\text{i}}} v f_{\Gamma^{\text{i}}}\ d\fe{F},
+\label{eq:bilinear_pg_advection_l}
 \end{align}
 \end{subequations}
 
 where $f_{\Gamma^{\text{i}}} = \varv{\hat{n}} \cdot \varv{b} u_{\Gamma^{\text{i}}}$ and where the single-valued trace
 normal fluxes, $f^* \coloneqq \varv{\hat{n}} \cdot \varv{b} u|_{\fe{F}}$, have been introduced as part of the group
 variable $\varg{u} \coloneqq (u,f^*)$. The selection of $f^*$ instead of $u^*$ as the trace unknown is made because of
-the possible degeneration of $\varv{\hat{n}} \cdot \varv{b}$. ~\eqref{eq:bilinear_pg_advection} can be expressed more
+the possible degeneration of $\varv{\hat{n}} \cdot \varv{b}$. ~\eqref{eq:bilinear_pg_advection}
+and~\eqref{eq:bilinear_pg_advection_l} can be expressed more
 compactly as
 \begin{align} \label{eq:bilinear_pg_advection_jump}
 b(v,\varg{u}) 
 =\ & \sum_{\fe{V}} \int_{\fe{V}} - \nabla v \cdot \varv{b} u\ d\fe{V}
-+ \frac{1}{2} \int_{\fe{F}} \jump{v} f^*\ d\fe{F},
++ \frac{1}{2} \int_{\fe{F}} \jump{v} f^*\ d\fe{F}, \\
+l(v)
+=\ & \sum_{\fe{V}} \int_{\fe{V}} v s\ d\fe{V},
 \end{align}
 
 after introducing the \textit{jump} operator, $\jump{v} = v^- - v^+ $, with ``$-$'' and ``$+$'' referring to the
@@ -49,18 +53,18 @@ b(v,\varg{u})
 \frac{1}{2} ||\jump{v}||_{L^2(\fe{F})} ||f^*||_{L^2(\fe{F})} \\
 \le\ &
 \underbrace{\left(
-\sum_{\fe{V}} || - \nabla v \cdot \varv{b} ||^2_{L^2(\fe{V})} + \frac{1}{\sqrt{2}} ||\jump{v}||^2_{L^2(\fe{F})}
+\sum_{\fe{V}} || - \nabla v \cdot \varv{b} ||^2_{L^2(\fe{V})} + \frac{1}{2} ||\jump{v}||^2_{L^2(\fe{F})}
 \right)^\frac{1}{2}}_{||v||_\fspace{V}}
 \times
 \underbrace{\left(
-\sum_{\fe{V}} || u ||^2_{L^2(\fe{V})} + \frac{1}{\sqrt{2}} ||f^*||^2_{L^2(\fe{F})}
+\sum_{\fe{V}} || u ||^2_{L^2(\fe{V})} + \frac{1}{2} ||f^*||^2_{L^2(\fe{F})}
 \right)^\frac{1}{2}}_{||u||_\fspace{U}}.
 \end{align}
 % Note that the above is a norm on $\fspace{V}$ because constants are accounted for by the trace term.
 
 Above, $\varg{u} \in \fspace{U} = L^2(\Omega_h) \times L^2(\Gamma^+_h)$, and $v \in \fspace{V} = H^1_\vect{b}(\Omega_h)$
-where the $h$ subscripts denote discretization, $\Gamma^+_h$ is the union of all volumes faces
-including those of the boundary and the internal skeleton, and where the spaces are defined according to
+where the $h$ subscripts denote discretization, $\Gamma^+_h$ is the union of all faces including those of the boundary
+and the internal skeleton, and where the spaces are defined according to
 \begin{align}
 L^2(\Omega_h)
 =\ & \{ u : u \in L^2(\fe{V})\ \forall \fe{V} \in \Omega_h \}, \\
@@ -71,33 +75,34 @@ H^1_{\vect{b}}(\Omega_h)
 \end{align}
 
 Note that the space chosen above for $\fspace{U}$ implies a weak imposition of the inflow boundary condition, and it is
-imagined that a \textit{ghost} volume neighbouring the inflow boundaries allows for the imposition of the boundary
-conditions. Equality in~\eqref{eq:cauchy_scwarz_advection} is attained, as desired due to~\eqref{eq:bui_thanh_2-6}, if
+imagined that a \textit{ghost} volume neighbouring the inflow boundaries is used to achieve this.
+Equality in~\eqref{eq:cauchy_scwarz_advection} is attained, as desired due to~\eqref{eq:bui_thanh_2-6}, if
 the test functions are chosen such that
-\begin{align}
-u =\ & -\nabla v_u \cdot \vect{b} && \text{in}\ \fe{V}, \\
+\begin{alignat}{3}
+u =\ & -\nabla v_u \cdot \vect{b}\quad && \text{in}\ \fe{V}, \\
 f^* =\ & \jump{v_u} && \text{on}\ \fe{F}.
-\end{align}
+\end{alignat}
 
 In general, for basis functions of the form $\varg{\hat{\phi}} = (0,\hat{\phi}) \in \fspace{U}$,
-\begin{align}
-0 =\ & -\nabla v_{\hat{\phi}} \cdot \vect{b} && \text{in}\ \fe{V}, \label{eq:optimal_test_adv_trace_0} \\
+\begin{alignat}{3}
+0 =\ & -\nabla v_{\hat{\phi}} \cdot \vect{b}\quad && \text{in}\ \fe{V}, \label{eq:optimal_test_adv_trace_0} \\
 \hat{\phi} =\ & \jump{v_{\hat{\phi}}} && \text{on}\ \fe{F},
 \label{eq:optimal_test_adv_trace_1}
-\end{align}
+\end{alignat}
 
 and for basis functions $\varg{\phi} = (\phi,0) \in \fspace{U}$,
-\begin{align}
-\phi =\ & -\nabla v_{\phi} \cdot \vect{b} && \text{in}\ \fe{V}, \label{eq:optimal_test_adv_sol} \\
+\begin{alignat}{3}
+\phi =\ & -\nabla v_{\phi} \cdot \vect{b}\quad && \text{in}\ \fe{V}, \label{eq:optimal_test_adv_sol} \\
 0 =\ & \jump{v_{\phi}} && \text{on}\ \fe{F}.
 \label{eq:optimal_test_adv_sol_conforming}
-\end{align}
+\end{alignat}
 
 Considering the test function for the $L^2$ component of the solution, it can be noted
 that~\eqref{eq:optimal_test_adv_sol_conforming} imposes a conformity constraint on the test space, resulting in a
 specific PG method from~\autoref{sec:PG_aspect_of_DPG}. However, recalling~\autoref{prop:pg_subset_of_dpg}, the same
 solution is obtained using the practical DPG methodology of~\autoref{sec:dpg_abstract_setting}, and this can be achieved
-by omitting the conformity constraint and limiting the support of each of the optimal test functions,
+by \makered{omitting the conformity constraint and limiting the support of each of the optimal test functions}
+(\makered{THIS CERTAINLY SEEMS NOT TO BE ALLOWED. THINK.}),
 \begin{align}
 \support{v_{\hat{\phi} \in \fe{F}}}
 =\ & \{ \fe{V}_i \in \Omega_h : \fe{V}_i \cap \fe{F} \ne \emptyset \}

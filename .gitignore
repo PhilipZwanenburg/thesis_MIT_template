@@ -19,5 +19,6 @@ sage/dpg_linear_advection/sage-plots-for-dpg_lin_adv.tex/
 
 *.gz
 *.swp
+auto/*.el
 
 .DS_Store

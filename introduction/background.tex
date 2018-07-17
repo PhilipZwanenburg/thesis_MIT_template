@@ -1,0 +1,25 @@
+\section{Background}
+\label{sec:intro_background}
+
+The discontinuous Galerkin (DG) method, initially proposed by Reed et
+al.~\cite{Reed1973} and subsequently analyzed for the solution of systems of
+conservation
+laws~\cite{Cockburn1991,Cockburn1989a,Cockburn1989b,Cockburn1990,Cockburn1998},
+has become the most popular choice of high-order scheme in the CFD community.
+Despite its widespread usage, there are still several major issues related to
+the standard DG scheme:
+\begin{itemize}
+\item High computational complexity with increasing order of accuracy;
+\item Difficulty in generating meshes for complex geometrical objects as well as
+  in converting low-order meshes provided by standard mesh generators to
+  high-order meshes;
+\item In the context of hyperbolic or convection-dominated PDEs, the usage of
+  potentially improper stabilization using specific numerical fluxes.
+\end{itemize}
+
+Using the DG method as the reference point, we proceed with a discussion of
+state-of-the-art advances for tackling the issues listed above with the aim
+of highlighting that the DG method may be far from the best choice when
+solving systems of hyperbolic conservation laws.
+
+\subsection{Computational Complexity}

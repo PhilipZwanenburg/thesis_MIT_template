@@ -59,9 +59,9 @@ var('a,b,c')
 
 hv = 1/2^2
 
-#assume(a>0); b = 0; c = 0; av = 2; bv = 0; cv = 0;
+assume(a>0); b = 0; c = 0; av = 2; bv = 0; cv = 0;
 #assume(c>0); a = 0; b = 0; av = 0; bv = 0; cv = 2;
-assume(a>0,c>0); b = 0; c = a; av = 2; bv = 0; cv = 2;
+#assume(a>0,c>0); b = 0; c = a; av = 2; bv = 0; cv = 2;
 #a = 0; assume(b>0); c = 0; av = 0; bv = 2; cv = 0;
 #assume(a>0,b>0,c>0); c = a; av = 2; bv = 3; cv = av;
 \end{sagesilent}
@@ -88,10 +88,11 @@ For the 1D case under consideration, with volumes numbered from $1$ to $n$ and f
 bilinear form associated with the steady linear advection equation (assuming a unit advection velocity) is given by
 \begin{align} \label{eq:bilinear_adv}
 b(v,\varg{u}) 
-& = \sum_{i=1}^n -\int_{-1}^{1} v_i^{'} u_i dr - v_i(-1)f_{i-1}+v_{i}(1))f_i\ \forall v
+& = \sum_{i=1}^n -\int_{-1}^{1} v_i^{'} u_i dr - v_i(-1)f_{i-1}+v_{i}(1)f_i\ \forall v
 %\\
 %& = \sum_{i=1}^n -\int_{-1}^{1} v_i^{'} u_i dr + \sum_{i=0}^n \jump{v} f_i,\ \forall v.
 \end{align}
+\makered{Make the normal flux the group variable.}
 
 Above, $\varg{u} \coloneqq (u,f)$ is the group variable for the solution and trace flux components, and $v$ is a test
 function and where all quantities have been transferred to the reference volume and face.

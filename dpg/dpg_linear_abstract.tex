@@ -89,8 +89,14 @@ M = \gamma = 1
 b(v_u,u) = ||v_u||_{\fspace{V}} ||u||_{\fspace{U}}\ \forall u \in \fspace{U} \setminus \{0\},
 \end{align}
 
-where $v_u$ is termed an optimal test function for the trial function $u$. Further, assuming
-that~\eqref{eq:bui_thanh_2-6} holds,~\eqref{eq:equal_m_gamma} is satisfied when the discrete test space is defined by
+where $v_u$ is termed an optimal test function for the trial function $u$.
+\makered{Note: When $b(v_u,u) = ||v_u||_{\fspace{V}} ||u||_{\fspace{U}}$, $v_u$ is computed such that
+$||v_u||_{\fspace{V}} \coloneqq ||u||_{\fspace{U}}$, leading directly to $b(v_u,u) = ||u||_{\fspace{U}}^2$. From the
+basic DPG theory that the optimal solution is computed in the energy norm, $b(v_u,u)$, the result for optimal
+convergence in the $\fspace{U}$-norm is thus immediate (and trivial). There is no need to cite Bui-Thanh here then as
+all of this can be seen in Demkowicz2010 (Theorems 2.1 and 2.2) ...}
+Further, assuming that~\eqref{eq:bui_thanh_2-6} holds,~\eqref{eq:equal_m_gamma} is satisfied when the discrete test
+space is defined by
 \begin{align} \label{eq:def_discrete_test_space}
 \fspace{V} \supset \fspace{V}_h 
 = \spantext{ \{ v_{u_h} \in \fspace{V} : u_h \in \fspace{U}_h \subseteq \fspace{U},\ b(v_{u_h},u_h) }
@@ -260,20 +266,21 @@ Since, $T\hat{w}_h \in \afspace{V}_h$, it follows that
 \end{align}
 
 and consequently that $\bar{v}_h^{\bot} \in \bar{V}_h$. Because $T\varg{w}_h \in \afspace{V}_h$, then, as above,
-\begin{align}
-0 = \bar{b}(\bar{v}_h^{\bot},\varg{w}_h).
+\begin{align} \label{eq:bilinear_v_ortho}
+0 = \bar{b}(\bar{v}_h^{\bot},\varg{w}_h),
 \end{align}
 
-By definition of $\bar{v}$
+and consequently,
 \begin{align}
 0
 =\ &
-(\bar{v}_h^{\bot},\bar{v})_{\afspace{V}(\fe{V})} && (\text{by definition}) \nonumber \\
+(\bar{v}_h^{\bot},\bar{v})_{\afspace{V}(\fe{V})} && (\text{by definition of $\bar{v}$ and
+using}~\eqref{eq:bilinear_v_ortho}) \nonumber \\
 =\ &
 (\bar{v}_h^{\bot},\bar{v}_h^{\bot})_{\afspace{V}(\fe{V})} && (\text{using}\ \afspace{V}\text{-orthogonality}). \nonumber
 \end{align}
 
-and it is immediate that $\bar{v} = \bar{v}_h \in \afspace{V}_h$.
+Thus $\bar{v} = \bar{v}_h \in \afspace{V}_h$.
 
 \end{proof}
 
