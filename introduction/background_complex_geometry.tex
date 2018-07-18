@@ -1,0 +1,85 @@
+\subsection{Treatment of Complex Geometry}
+\label{sec:background_complex_geom}
+
+The proper treatment of complex geometry in high-order finite element methods has been
+shown to be crucial. In the seminal work on the topic in the context of elliptic
+PDEs, it was proven that curved geometry had to be represented
+isoparametrically, i.e. in a polynomial space having the same degree as the
+solution, with specific constraints on the polynomial representation employed
+for optimal convergence to be obtainable~\cite[Theorem
+\makeblue{5}]{Ciarlet1972}.
+While errors due to improper geometry representation may only begin to manifest
+themselves at very fine levels of solution resolution, it is precisely the goal
+of high-order methods to achieve these levels of accuracy. Further, if these
+geometric errors result in decreasing convergence rates of high-order methods,
+then the increase in the computational complexity would be incurred with no
+additional benefit.
+
+As high-order meshes are commonly generated from the degree elevation of
+initially linear meshes, the manner in which the projection of the initially
+straight-sided mesh to the curvilinear domain is performed is of critical importance.
+In the early years of the application of finite element methods to problems
+in domains having curved boundaries, many seemingly disjointed strategies
+were proposed to achieve the correct polynomial geometry representation satisfying the
+necessary constraints. Assuming suitable placement of geometry interpolation
+nodes along the curved boundary, the transfer of the curved face representation
+to the volume geometry nodes was achieved using transfinite blending function
+interpolation, first proposed by Gordon et al. for tensor-product
+elements~\cite{Gordon1973} and subsequently generalized to simplex
+elements in both
+two~\cite{Nielson1979,Haber1981,Szabo1991,Lacombe1988,Dey1997,Xie2013} and
+three~\cite{Lenoir1986} dimensions.
+Assuming that a Lagrange polynomial description of the geometry is being used
+and that corner nodes are located on the exact curved boundary, the process
+proceeds by sequentially projecting straight edge and face nodes to the curved
+geometry followed by the application of a blending operation which appropriately
+displaces the volume nodes (those not on the domain boundary). Recently, an additional
+constraint related to the discrete curvature of the meshed domain was shown to
+be necessary for optimal convergence \makered{cite Zwanenburg - Discrete
+  Curvature}. In the same article, guidelines were provided concerning the
+correct placement of face geometry nodes and a unification of two-dimensional
+blending function interpolations and generalization to the three-dimensional
+case was presented.
+
+Perhaps surprisingly, numerical results for the Euler equations showed that a
+superparametric geometry representation, with polynomial degree one higher than
+the solution, was \emph{required} for optimal convergence only when the solution
+was represented by a polynomial basis having degree $p = 1$~\cite{Bassi1997};
+this numerical result has since been extended to show that the superparametric
+geometry representation is in fact required for all polynomial
+degrees~\cite{Zwanenburg2017}.
+Initially, this phenomenon was explained using the argument that the
+that low-order geometry representation results in deterioration of
+solution quality as the order of the scheme is increased due to rarefaction
+waves being formed at vertices of polygonal mesh
+surfaces~\cite{Krivodonova2006}. However, a thorough analysis of the problem was
+recently performed in which it was demonstrated that the problem occurs in all
+instances in which a boundary condition is used which dependends on a normal
+vector computed using the isoparametric geometry representation \makered{cite
+  Zwanenburg - Necessity superparametric}. A result of particular interest
+arising from this study was the demonstration that the use of exact normal
+vectors in combination with isoparametric volume metric terms does not remedy
+the problem due to the violation of discrete metric identities resulting in a
+high-order conservation error of the same magnitude as that introduced by the
+isoparametric normal vectors. This represents the high-order analogue
+of the violation of free-stream preservation, which has been shown to be
+avoidable by computing metrics according to an elegant curl-formulation by
+Kopriva~\cite{Kopriva2006}.
+
+It is important to emphasize that the discussion above assumed that a valid linear
+mesh could initially be generated for the complex geometry to be modelled in the
+simulation. In fact, it has recently been estimated that approximately 80\% of
+overall analysis time in the aerospace industry is devoted to (linear) mesh
+generation~\cite{Hughes2005}, resulting in serious challenges when attempting to
+interface between simulated results and the
+Computer Aided Design (CAD) model, for example. This motivated the formulation
+of isogeometric analysis (IGA) where the solution is represented in the same basis as
+the CAD geometry (non-polynomial), allowing for perfect geometric representation at any level of
+mesh refinement and seamless interfacing with the CAD model~\cite{Hughes2005}.
+While the competitiveness of this new approach with existing methods has been
+demonstrated in numerous academic benchmark test cases in both structural and fluid
+mechanics, its general applicability to test cases having sufficient geometric
+complexity to be relevant to the CFD industry is still in question. Further, the
+extension of the approximation theory results from the polynomial context discussed
+above to the most popular IGA setting employing non-uniform rational spline as
+basis functions is still in its infancy.

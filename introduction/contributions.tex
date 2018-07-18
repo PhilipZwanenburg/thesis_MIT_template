@@ -1,13 +1,15 @@
 \section{Contributions}
 While the ultimate goal of the thesis work presented here
 was related to the last of the items listed in~\autoref{sec:intro_background}, namely the investigation of
-stabilization methods introduced in alternate manners to the use of numerical
-fluxes, several difficulties encountered while working towards the necessary
-framework ultimately ended up forming a major part of the novel contributions.
+the advatages of of introducing the required stabilization through the variation
+of the test space as opposed to using a numerical flux,
+several difficulties encountered while working towards the necessary
+framework ultimately ended up forming a dominant part of the novel contributions
+which resulted from this research effort.
 
-As emphasized in the motivation,~\autoref{sec:intro_motivation}, that optimal
-convergence rates be obtained for high-order methods is critical to their
-success.
+As emphasized in the motivation,~\autoref{sec:intro_motivation}, critical to the
+success of high-order methods is that that optimal
+convergence rates be obtained.
 During the course of the verification of the methods implemented for
 the thesis work several issues resulting in the loss of optimal convergence were
 identified in relation to the treatment of curved geometry.
@@ -34,20 +36,20 @@ spaces for proper stabilization led to the conclusion that this goal was not
 achievable when the dimension of the problem was greater than one.
 
 Following up with the numerical implementations of both the DPG and OPG methods, it quickly
-became clear that significant challenges existed when considering the extension
+became clear that significant challenges existed when considering even marginal extensions
 of the work presented in the literature. In particular:
 \begin{itemize}
 \item the discrete spaces used to motivate the superiority of the methods
   required that the globally coupled unknowns correspond to a polynomial
   representation one higher than that used for HDG and HDPG methods,
   resulting in the Petrov-Galerkin methods considered here having global systems corresponding
-  to those of alternative methods of one higher degree; % Discuss HDPG results (Moro thesis)
+  to those of alternative methods of one higher degree;
 \item the specification of suitable boundary conditions was found to be problematic
   in all but the most straightforward contexts;
 \item \makered{the use of the methods based on the solution of linearized PDEs
   resulted in a stalled iterative procedure when strong nonlinearities were
-  present and a physical constraint (such as positivity) was required for the
-  solution.}
+  present and a physical constraint (such as positivity of density and pressure)
+  was required for the solution.}
   % Not yet implemented: try the viscous burgers example from Jesse (p. 147)
   % comparing the linear and nonlinear test space and hope for improvement.
 \end{itemize}
@@ -56,7 +58,8 @@ While we propose extensions allowing for the treatment of several of these
 issues, our attempts have generally resulted in the loss of advanteous
 properties of the methods. For example, the imposition of general boundary
 conditions was performed using the same procedure as that employed for the DG
-method, resulting generally in a loss of symmetry of the global system matrix.
+method, resulting generally in a loss of symmetry of the global system matrix
+present for the DPG method in simpler contexts.
 Regarding the implementation of DPG applied to the nonlinear PDEs, it was found
 that Hessian terms required for the exact linearization to allow for quadratic
 convergence in the Newton method resulted in an extremely high computational
@@ -73,7 +76,8 @@ Finally, while not at all related to research goals for the thesis as presented
 here, we would like to note that a significant amount of time was also devoted
 to a generalized demonstration of the equivalence between the Energy Stable Flux
 Reconstruction (ESFR) schemes~\cite{Vincent2011,Williams2014a} and a modally
-filtered DG scheme~\cite{Zwanenburg2016} for 3D curvilinear domains.
+filtered DG scheme~\cite{Zwanenburg2016} in 3D curvilinear domains for both
+tensor-product and simplex elements.
 
 \makegreen{Goal:Try DPG on Navier-Stokes case with shock and show better
   stabilization. Alternatively, used DPG for coarse mesh and use as initial

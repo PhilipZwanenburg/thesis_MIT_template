@@ -662,4 +662,7 @@ comment here
 \let\oldnabla\nabla
 \renewcommand{\nabla}{{\vect{\oldnabla}}}
 
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt} % Remove additional space before itemize
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

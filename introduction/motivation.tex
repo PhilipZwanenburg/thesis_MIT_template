@@ -37,7 +37,7 @@ considered domain.
 The most popular and convenient approach for high-order
 solution representation is through the use piecewise polynomial basis functions
 having limited support.
-Within this framework, it is expected that the
+Within such a framework, it is expected that the
 combination of mesh refinement level adaptation ($h$-adaptation) and polynomial
 degree adaptation ($p$-adaptation) can be used to obtain a very efficient
 representation of the solution, and reduce the computational cost of obtaining
@@ -53,12 +53,12 @@ Further, all relevant aspects of the discretization must be
 considered such that the optimal rates are observed in practice.
 Another pressing challenge stems from the fact that high-order methods have less
 numerical diffusion as compared to low-order methods, leading in many cases to
-the requirement for the addition of additional stabilization to that
-provided by the scheme.
+the requirement for additional stabilization to that naturally provided by
+the scheme.
 This stabilization is commonly introduced either through
 the use of a limiter or by adding an artificial dissipation term to
 discretization.
-Both methods result in a modification of the computed solution
-as compared to that which is associated with the PDE and the investigation of
-methods naturally introducing the physically correct stabilization are
-consequently of great importance as well.
+Both methods can be interpreted result in a modification of the PDE used to
+obtain the computed solution and the investigation of methods naturally
+introducing the physically correct stabilization are consequently of great
+importance.

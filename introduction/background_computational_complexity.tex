@@ -1,0 +1,44 @@
+\subsection{Computational Complexity}
+\label{sec:background_comp_comp}
+
+Significant progress has been made with regard to the DG method's computational
+complexity, notably through the exploitation of sum factorization techniques,
+originally proposed by Orszag~\cite{Orszag1980} and now employed in the
+general elements using collapsed tensor-product spaces by Karniadakis et
+al.~\cite{Karniadakis1999}. When explicit methods are used, the sum
+factorization technique reduces the growth in computational complexity from
+$O(N^{2d})$ to $O(N^{d+1})$ where $d$ is the dimension of the problem and $N =
+P+1$ where $P$ is the maximal polynomial degree of the basis functions used to
+represent the solution; savings for implicit formulations are even greater.
+
+Alternatively, in the case of using implicit methods, the appropriate
+decomposition of element bases into corner,
+edge, face, and volume modes allows for the possibility of statically condensing out
+the volume modes, significantly reducing the growth rate of globally coupled DOF
+as the degree of the solution is increased in global matrix inversion stages.
+In practice, this choice of polynomial basis representation is rarely used due
+to the advantages associated with orthonormal, interpolatory or everywhere
+positive basis functions and this reduction in DOF is not possible. This
+provided the motivation for the development of what are termed
+hybridizable methods where schemes were specifically designed such that global
+coupling of the solution occurs only through unknowns defined on element faces,
+such that the size of the global system scales in proportion to the number of
+face unknowns, exactly corresponding to the static condensation of volume
+unknowns.
+
+The hybridizable discontinuous Galerkin (HDG) method was initially
+introduced in the context of elliptic equations~\cite{Cockburn2009}, but was
+quickly generalized to more complex partial differential equations, notably
+to the compressible Navier-Stokes equations~\cite{Peraire2010}.
+More recently, a generalized framework called the Hybrid High-Order method which
+is able to recover specific HDG formulations with superoptimal convergence for
+elliptic problems and which supports general polytopal elements was
+proposed~\cite{DiPietro2015} and extensions to PDEs of interest to the CFD
+community are progressing rapidly.
+In the Petrov-Galerkin setting specifically related to this thesis, both the
+proposed hybridized discontinuous
+Petrov-Galerkin (HDPG)~\cite{Moro2012} and discontinuous Petrov-Galerkin
+(DPG)~\cite{Demkowicz2010,Demkowicz2017} methods support the static condensation
+property and thus also have this advantage over the standard DG formulations and
+the potential to remain competitive with the DG methods for implicit problems
+despite requiring more expensive element local operations.

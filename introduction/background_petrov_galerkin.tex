@@ -1,0 +1,89 @@
+\subsection{Petrov-Galerkin Approaches for Stabilization}
+\label{sec:background_pg_stabilization}
+
+The Galerkin method was originally developed for the solution of PDEs in
+structural mechanics in which it can be shown to provide optimal results based
+on the implicit relationship betwen the resulting variational formulation and
+the minimization of an energy functional.
+In the setting of convection-dominated or purely hyperbolic PDEs, the optimal
+convergence result is lost and it is now well understood that additional
+stabilization is required.
+In the linear setting, the degradation in solution accuracy,
+generally manifested through the development of unphysical oscillations
+throughout the domain, can be formally explained by appealing the approximation
+result provided by Babu\v{s}ka's theorem~\cite[Theorem \makeblue{2.2}]{Babuska1971}
+which states that the Galerkin error for a well-posed problem satisfies
+\begin{align}
+||u-u_h||_{\fspace{U}} \le \left( 1 + \frac{M}{\gamma_h} \right) \inf_{w_h \in \fspace{U}_h} ||u-w_h||_{\fspace{U}},
+\end{align}
+
+where $M$ and $\gamma_h$ are the continuity and discrete inf-sup constants. The
+use of improper stabilization can be directly linked to the vanishing of the
+discrete inf-sup constant. This result is not directly generalizable to
+the context of the nonlinear PDEs of interest for CFD, but it is still expected
+that employing a formulation in which the discrete inf-sup constant is increased
+should result in improved stability in a wide range of contexts.
+
+Through the recently popularized interpretation of numerical flux induced
+stabilization associated with the DG-type methods through a suitable
+penalization of interface jumps~\cite{Brezzi2004,DiPietro2011} it is possible to
+derived stability estimates providing explicit representations for the
+continuity and inf-sup constants. However, it is not generally possible to
+obtain optimal stabilization in this setting (maximizing the discrete inf-sup
+constant) nor does the norm used to measure the solution,
+$||\cdot||_{\fspace{U}}$, necessarily correspond to that which is most
+desirable (notably the $\fspace{L}^2$ norm).
+
+Several methods introducing the
+stabilization through the variation of the test space, resulting in a
+Petrov-Galerkin framework, have been shown to have the flexibility to meet these
+objectives.
+The first attempt at the introduction of stabilization through the variation of
+the test space was provided in the context of continuous finite element
+solutions through the use of residual-based stabilization in the form of the
+Streamline Upwind Petrov Galerkin (SUPG) formulation~\cite{Brooks1982}.
+It was subsequently shown by the same author that the SUPG formulation was in
+essence complementing the solution space with information related to the
+fine-scale (unresolvable by the current mesh) Green's function in the context of
+the variational multiscale method~\cite{Hughes1998,Hughes2007}.
+Approaching the problem from the functional analysis setting discussed above,
+the discontinuous Petrov-Galerkin method with optimal test functions was
+introduced where the test space is chosen specifically to achieve the supremum
+in the discrete inf-sup condition~\cite{Demkowicz2010,Demkowicz2017}; in
+essence, the test space is chosen for its good stability properties as opposed
+to good approximation properties required for the trial space.
+In the CFD setting,
+a further emphasized advantage is that the formulation naturally precludes the
+need for the formulation of numerical fluxes, requiring the selection of a norm
+for the test space instead, which has the potential of being more naturally
+selected based on the terms present in the variational form.
+A hybridized discontinuous Petrov-Galerkin method~\cite{Moro2012} has also been
+proposed as a blend between the HDG and DPG schemes with the goal of retaining
+the minimally number of globally coupled DOF while retaining the optimal
+stability properties of the DPG scheme. Several subsequent investigations have
+focused on attempting to find optimal test norms defined in the sense of the
+computed solution being given by the $\fspace{L}^2$ projection of the exact
+solution. The investigation was initially undertaken by Bui-Thanh et
+al.~\cite{BuiThanh2013} resulting in an impractical method as a result of the
+test functions having global support, but eventually reformulated by Brunken et
+al.~\cite{Brunken2018} in what will be referred to as the optimal trial
+Petrov-Galerkin (OPG) method such that a practical method to achieve this goal was
+obtained.
+
+The improved stability of the Petrov-Galerkin methods thus has the potential to reduce the need
+for additional ad-hoc approaches where oscillations are popularly suppressed
+either through the addition of artificial viscosity or by limiting the solution
+using a modal filtering approach. By minimizing modifications to the computed
+solution, it is then expected that convergence to the nonlinear solution would
+be more robust on underresolved meshes and also that adaptation mechanisms
+relying on a posteriori error indicators would have a reduced tendency to refine
+the discrete space in incorrect regions as a result of the introduced solution regularization.
+The DPG and HDPG methods have both been shown to be able to converge in cases
+where DG-type methods have failed, generally in the presence of the
+solution having large gradients when no additional stabilization is added.
+However, results have generally shown that DPG solutions possess qualitatively
+similar oscillations to those present when using the DG-type methods when the
+element P\'eclet number is on the order of $\mathcal{O}(10)$, only one order
+of magnitude greater than that leading to oscillations for the DG methods.
+Further investigation and comparison is thus required in order to establish whether
+the added cost is justified.
